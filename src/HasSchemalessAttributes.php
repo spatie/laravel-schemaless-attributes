@@ -19,6 +19,15 @@ trait HasSchemalessAttributes
         return SchemalessAttributes::createForModel($this, 'schemaless_attributes');
     }
 
+    /**
+    public function setSchemalessAttributesAttribute($value): self
+    {
+        $this->schemalessAttributes->replace($value);
+
+        return $this;
+    }
+    */
+
     public function addSchemalessAttributes(array $attributes): self
     {
         foreach ($attributes as $name => $value) {

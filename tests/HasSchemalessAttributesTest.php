@@ -54,6 +54,17 @@ class HasSchemalessAttributesTest extends TestCase
     }
 
     /** @test */
+    public function it_can_get_and_set_values_using_dot_notation()
+    {
+        $this->testModel->schemaless_attributes = [
+            'rey' => ['side' => 'light'],
+            'snoke' => ['side' => 'dark'],
+        ];
+
+        $this->assertEquals('light', $this->testModel->get('rey.side'));
+    }
+
+    /** @test */
     public function it_can_forget_a_single_schemaless_attribute()
     {
         $this->testModel->schemaless_attributes->name = 'value';
@@ -198,7 +209,7 @@ class HasSchemalessAttributesTest extends TestCase
 
     protected function assertContainsModels(array $expectedModels, Collection $actualModels)
     {
-        $assertionFailedMessage = 'Expected '.count($expectedModels).' models. Got '.$actualModels->count().' models';
+        $assertionFailedMessage = 'Expected ' . count($expectedModels) . ' models. Got ' . $actualModels->count() . ' models';
 
         $this->assertEquals(count($expectedModels), $actualModels->count(), $assertionFailedMessage);
     }

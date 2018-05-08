@@ -8,6 +8,29 @@
 
 Wouldn't it be cool if you could just have a bit of the spirit of nosql available in Eloquent? This package does just that. It provides a trait that, when applied on a model, allow you to store arbritrary values in your model.
 
+Here are a few examples
+
+```php
+// add and retrieve an attribute
+$yourModel->schemaless_attributes->name = 'value';
+$yourModel->schemaless_attributes->name; // returns 'value';
+
+// you can also use the array approach
+
+$yourModel->schemaless_attributes['name'] = 'value';
+$yourModel->schemaless_attributes['name'] // returns 'value';
+
+// setting multiple values in one go
+$yourModel->schemaless_attributes = [
+   'rey' => ['side' => 'light'], 
+   'snoke' => ['side' => 'dark']
+];
+
+// retrieving values using dot notation
+$yourModel->schemaless_attributes->get('rey.side'); // returns 'light';
+```
+
+
 ## Installation
 
 You can install the package via composer:
