@@ -1,20 +1,32 @@
 language: php
 
-php:
-  - 7.1
-  - 7.2
+services:
+    - docker
 
 env:
   matrix:
     - COMPOSER_FLAGS="--prefer-lowest"
     - COMPOSER_FLAGS=""
 
+php:
+    - 7.0
+    - 7.1
+    - 7.2
+
+sudo: false
+
+install:
+    - travis_retry composer install
+
 before_script:
-  - travis_retry composer self-update
-  - travis_retry composer update ${COMPOSER_FLAGS} --no-interaction --prefer-source
+    - travis_retry composer self-update
+    - travis_retry composer update ${COMPOSER_FLAGS} --no-interaction --prefer-dist
+    - sudo service mysql stop
+    - docker-compose -f ./tests/docker-compose.yml up -d
+    - php tests/wait.php
 
 script:
-  - vendor/bin/phpunit --coverage-text --coverage-clover=coverage.clover
+    - vendor/bin/phpunit
 
 after_script:
-  - php vendor/bin/ocular code-coverage:upload --format=php-clover coverage.clover
+    - docker-compose -f ./tests/docker-compose.yml down
