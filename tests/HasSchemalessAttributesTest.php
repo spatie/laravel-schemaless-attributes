@@ -76,7 +76,7 @@ class HasSchemalessAttributesTest extends TestCase
     {
         $array = [
             'rey' => ['side' => 'light'],
-            'snoke' => ['side' => 'dark']
+            'snoke' => ['side' => 'dark'],
         ];
 
         $this->testModel->schemaless_attributes = $array;
@@ -229,7 +229,7 @@ class HasSchemalessAttributesTest extends TestCase
 
     protected function assertContainsModels(array $expectedModels, Collection $actualModels)
     {
-        $assertionFailedMessage = 'Expected ' . count($expectedModels) . ' models. Got ' . $actualModels->count() . ' models';
+        $assertionFailedMessage = 'Expected '.count($expectedModels).' models. Got '.$actualModels->count().' models';
 
         $this->assertEquals(count($expectedModels), $actualModels->count(), $assertionFailedMessage);
     }
