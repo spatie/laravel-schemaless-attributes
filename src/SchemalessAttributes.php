@@ -3,9 +3,10 @@
 namespace Spatie\SchemalessAttributes;
 
 use ArrayAccess;
+use Countable;
 use Illuminate\Database\Eloquent\Model;
 
-class SchemalessAttributes implements ArrayAccess
+class SchemalessAttributes implements ArrayAccess, Countable
 {
     /** @var \Illuminate\Database\Eloquent\Model */
     protected $model;
@@ -77,5 +78,10 @@ class SchemalessAttributes implements ArrayAccess
     public function offsetUnset($offset)
     {
         $this->forget($offset);
+    }
+
+    public function count()
+    {
+        return count($this->schemalessAttributes);
     }
 }

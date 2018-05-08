@@ -110,4 +110,14 @@ class HasSchemalessAttributesTest extends TestCase
 
         $this->assertNull($this->testModel->schemaless_attributes['name']);
     }
+
+    /** @test */
+    public function it_can_be_counted()
+    {
+        $this->assertCount(0, $this->testModel->schemaless_attributes);
+
+        $this->testModel->schemaless_attributes->name = 'value';
+
+        $this->assertCount(1, $this->testModel->schemaless_attributes);
+    }
 }
