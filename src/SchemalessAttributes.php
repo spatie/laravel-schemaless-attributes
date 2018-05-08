@@ -41,17 +41,24 @@ class SchemalessAttributes implements ArrayAccess, Countable
         return array_get($this->schemalessAttributes, $name);
     }
 
-    public function replace($value)
+    public function __set(string $name, $value)
     {
-        $this->schemalessAttributes = $value;
+        $this->set($name, $value);
     }
 
-    public function __set(string $name, $value)
+    public function set(string $name, $value)
     {
         array_set($this->schemalessAttributes, $name, $value);
 
         $this->model->{$this->sourceAttributeName} = $this->schemalessAttributes;
     }
+
+    public function replace($value)
+    {
+        $this->schemalessAttributes = $value;
+    }
+
+
 
     public function forget(string $name): self
     {

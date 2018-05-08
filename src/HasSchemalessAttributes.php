@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 
 trait HasSchemalessAttributes
 {
-    public function getCasts() : array
+    public function getCasts(): array
     {
         return array_merge(
             parent::getCasts(),
@@ -16,17 +16,32 @@ trait HasSchemalessAttributes
 
     public function getSchemalessAttributesAttribute(): SchemalessAttributes
     {
+
         return SchemalessAttributes::createForModel($this, 'schemaless_attributes');
     }
 
-    /**
-     * public function setSchemalessAttributesAttribute($value): self
-     * {
-     * $this->schemalessAttributes->replace($value);.
-     *
-     * return $this;
-     * }
-     */
+    /*
+        public function setSchemalessAttributesAttribute($value)
+        {
+            [$one, $two, $three, $caller] = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 4);
+
+            if (count($caller['args'])) {
+                $propName = $caller['args'][0];
+
+                $value = $caller['args'][1];
+
+                SchemalessAttributes::createForModel($this, 'schemaless_attributes')->$propName = $value;
+            }
+            else {
+                // array being set replace all props
+            }
+
+            dump('in set');
+
+            return SchemalessAttributes::createForModel($this, 'schemaless_attributes');
+        }
+    */
+
     public function addSchemalessAttributes(array $attributes): self
     {
         foreach ($attributes as $name => $value) {
