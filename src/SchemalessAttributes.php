@@ -61,7 +61,7 @@ class SchemalessAttributes implements ArrayAccess
 
     public function offsetExists($offset)
     {
-        return array_has($this->schemalessAttributes);
+        return array_has($this->schemalessAttributes, $offset);
     }
 
     public function offsetGet($offset)

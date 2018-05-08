@@ -102,7 +102,11 @@ class HasSchemalessAttributesTest extends TestCase
 
         $this->assertEquals('value', $this->testModel->schemaless_attributes['name']);
 
+        $this->assertTrue(isset($this->testModel->schemaless_attributes['name']));
+
         unset($this->testModel->schemaless_attributes['name']);
+
+        $this->assertFalse(isset($this->testModel->schemaless_attributes['name']));
 
         $this->assertNull($this->testModel->schemaless_attributes['name']);
     }
