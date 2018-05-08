@@ -2,9 +2,10 @@
 
 namespace Spatie\SchemalessAttributes;
 
+use ArrayAccess;
 use Illuminate\Database\Eloquent\Model;
 
-class SchemalessAttributes
+class SchemalessAttributes implements ArrayAccess
 {
     /** @var \Illuminate\Database\Eloquent\Model */
     protected $model;
@@ -13,7 +14,7 @@ class SchemalessAttributes
     protected $sourceAttributeName;
 
     /** @var array */
-    protected $schemaless_attributes = [];
+    protected $schemalessAttributes = [];
 
     public static function createForModel(Model $model, string $sourceAttributeName): self
     {
@@ -26,24 +27,24 @@ class SchemalessAttributes
 
         $this->sourceAttributeName = $sourceAttributeName;
 
-        $this->schemaless_attributes = $this->getRawSchemalessAttributes();
+        $this->schemalessAttributes = $this->getRawSchemalessAttributes();
     }
 
     public function __get(string $name)
     {
-        return array_get($this->schemaless_attributes, $name);
+        return array_get($this->schemalessAttributes, $name);
     }
 
     public function __set(string $name, $value)
     {
-        array_set($this->schemaless_attributes, $name , $value);
+        array_set($this->schemalessAttributes, $name , $value);
 
-        $this->model->{$this->sourceAttributeName} = $this->schemaless_attributes;
+        $this->model->{$this->sourceAttributeName} = $this->schemalessAttributes;
     }
 
     public function forget(string $name): self
     {
-        $this->model->{$this->sourceAttributeName} = array_except($this->schemaless_attributes, $name);
+        $this->model->{$this->sourceAttributeName} = array_except($this->schemalessAttributes, $name);
 
         return $this;
     }
@@ -56,5 +57,46 @@ class SchemalessAttributes
     protected function getRawSchemalessAttributes(): array
     {
         return json_decode($this->model->getAttributes()[$this->sourceAttributeName] ?? '{}', true);
+    }
+
+    public function offsetExists($offset)
+    {
+        return array_has($this->schemalessAttributes);
+    }
+
+    public function offsetGet($offset)
+    {
+        return $this->$offset;
+    }
+
+    /**
+     * Offset to set
+     * @link http://php.net/manual/en/arrayaccess.offsetset.php
+     * @param mixed $offset <p>
+     * The offset to assign the value to.
+     * </p>
+     * @param mixed $value <p>
+     * The value to set.
+     * </p>
+     * @return void
+     * @since 5.0.0
+     */
+    public function offsetSet($offset, $value)
+    {
+        $this->{$offset} = $value;
+    }
+
+    /**
+     * Offset to unset
+     * @link http://php.net/manual/en/arrayaccess.offsetunset.php
+     * @param mixed $offset <p>
+     * The offset to unset.
+     * </p>
+     * @return void
+     * @since 5.0.0
+     */
+    public function offsetUnset($offset)
+    {
+        $this->forget($offset);
     }
 }

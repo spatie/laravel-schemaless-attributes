@@ -94,4 +94,16 @@ class HasSchemalessAttributesTest extends TestCase
         $this->assertSame(true, $this->testModel->schemaless_attributes->bool);
         $this->assertSame(12.34, $this->testModel->schemaless_attributes->float);
     }
+
+    /** @test */
+    public function it_can_be_handled_as_an_array()
+    {
+        $this->testModel->schemaless_attributes['name'] = 'value';
+
+        $this->assertEquals('value', $this->testModel->schemaless_attributes['name']);
+
+        unset($this->testModel->schemaless_attributes['name']);
+
+        $this->assertNull($this->testModel->schemaless_attributes['name']);
+    }
 }
