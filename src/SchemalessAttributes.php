@@ -58,8 +58,6 @@ class SchemalessAttributes implements ArrayAccess, Countable
         $this->schemalessAttributes = $value;
     }
 
-
-
     public function forget(string $name): self
     {
         $this->model->{$this->sourceAttributeName} = array_except($this->schemalessAttributes, $name);
