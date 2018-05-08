@@ -27,4 +27,14 @@ class HasSchemalessAttributesTest extends TestCase
 
         $this->assertEquals('value', $this->testModel->schemaless_attributes->name);
     }
+
+    /** @test */
+    public function schemaless_attributes_will_get_saved_with_the_model()
+    {
+        $this->testModel->schemaless_attributes->name = 'value';
+
+        $this->testModel->save();
+
+        $this->assertEquals('value', $this->testModel->fresh()->schemaless_attributes->name);
+    }
 }
