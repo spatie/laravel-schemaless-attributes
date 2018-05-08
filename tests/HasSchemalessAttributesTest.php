@@ -54,12 +54,21 @@ class HasSchemalessAttributesTest extends TestCase
     }
 
     /** @test */
-    public function it_can_get_and_set_values_using_dot_notation()
+    public function it_can_get_values_using_dot_notation()
     {
         $this->testModel->schemaless_attributes->rey = ['side' => 'light'];
         $this->testModel->schemaless_attributes->snoke = ['side' => 'dark'];
 
         $this->assertEquals('light', $this->testModel->schemaless_attributes->get('rey.side'));
+    }
+
+    /** @test */
+    public function it_can_set_values_using_dot_notation()
+    {
+        $this->testModel->schemaless_attributes->rey = ['side' => 'light'];
+        $this->testModel->schemaless_attributes->set('rey.side', 'dark');
+
+        $this->assertEquals('dark', $this->testModel->schemaless_attributes->get('rey.side'));
     }
 
     /** @test */
