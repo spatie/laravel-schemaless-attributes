@@ -2,6 +2,8 @@
 
 namespace Spatie\SchemalessAttributes\Tests;
 
+use Illuminate\Support\Collection;
+
 class HasSchemalessAttributesTest extends TestCase
 {
     /** @var \Spatie\SchemalessAttributes\Tests\TestModel */
@@ -120,4 +122,87 @@ class HasSchemalessAttributesTest extends TestCase
 
         $this->assertCount(1, $this->testModel->schemaless_attributes);
     }
+
+    /** @test */
+    public function it_can_add_and_save_schemaless_attributes_in_one_go()
+    {
+        $array = [
+            'name' => 'value',
+            'name2' => 'value2',
+        ];
+
+        $testModel = TestModel::create()->addSchemalessAttributes($array);
+
+        $this->assertEquals($array, $testModel->schemaless_attributes->all());
+    }
+
+    /**
+     * @test
+     *
+     * @dataProvider scopeNameProvider
+     *
+     * @param string $scopeName
+     */
+    public function it_has_a_scope_to_get_models_with_the_given_schemaless_attributes(string $scopeName)
+    {
+        TestModel::truncate();
+
+        $model1 = TestModel::create()->addSchemalessAttributes([
+            'name' => 'value',
+            'name2' => 'value2',
+        ]);
+
+        $model2 = TestModel::create()->addSchemalessAttributes([
+            'name' => 'value',
+            'name2' => 'value2',
+        ]);
+
+        $model3 = TestModel::create()->addSchemalessAttributes([
+            'name' => 'value',
+            'name2' => 'value3',
+        ]);
+
+        $this->assertContainsModels([
+            $model1, $model2
+        ], TestModel::$scopeName(['name' => 'value', 'name2' => 'value2'])->get());
+
+        /*
+        $this->assertContainsModels([
+            $model3
+        ], TestModel::$scopeName(['name' => 'value', 'name2' => 'value3'])->get());
+
+        $this->assertContainsModels([
+        ], TestModel::$scopeName(['name' => 'value', 'non-existing' => 'value'])->get());
+
+        $this->assertContainsModels([
+            $model1, $model2, $model3
+        ], TestModel::$scopeName([])->get());
+
+        $this->assertContainsModels([
+            $model1, $model2, $model3,
+        ], TestModel::$scopeName('name', 'value')->get());
+
+        $this->assertContainsModels([
+        ], TestModel::$scopeName('name', 'non-existing-value')->get());
+
+        $this->assertContainsModels([
+        ], TestModel::$scopeName('name', 'non-existing-value')->get());
+        */
+    }
+
+    public function scopeNameProvider()
+    {
+        return [
+            ['withSchemalessAttribute'],
+            ['withSchemalessAttributes'],
+        ];
+    }
+
+    protected function assertContainsModels(array $expectedModels, Collection $actualModels)
+    {
+        $assertionFailedMessage = "Expected " . count($expectedModels) . ' models. Got ' . $actualModels->count() . ' models';
+
+        $this->assertEquals(count($expectedModels), $actualModels->count(), $assertionFailedMessage);
+    }
+
 }

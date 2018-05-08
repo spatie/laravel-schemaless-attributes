@@ -5,6 +5,7 @@ namespace Spatie\SchemalessAttributes;
 use ArrayAccess;
 use Countable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 
 class SchemalessAttributes implements ArrayAccess, Countable
 {
