@@ -36,11 +36,16 @@ class SchemalessAttributes
 
     public function __set(string $name, $value)
     {
-        $schemalessAttributes = $this->model->attributes[$this->sourceAttributeName];
+        array_set($this->schemaless_attributes, $name , $value);
 
-        array_set($schemalessAttributes, $name , $value);
+        $this->model->{$this->sourceAttributeName} = $this->schemaless_attributes;
+    }
 
-        $this->model->{$this->sourceAttributeName} = $schemalessAttributes;
+    public function forget(string $name): self
+    {
+        $this->model->{$this->sourceAttributeName} = array_except($this->schemaless_attributes, $name);
+
+        return $this;
     }
 
     protected function getRawSchemalessAttributes(): array

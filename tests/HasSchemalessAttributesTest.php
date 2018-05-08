@@ -15,13 +15,13 @@ class HasSchemalessAttributesTest extends TestCase
     }
 
     /** @test */
-    public function getting_a_non_existing_attribute_returns_null()
+    public function getting_a_non_existing_schemaless_attribute_returns_null()
     {
         $this->assertNull($this->testModel->schemaless_attributes->non_existing);
     }
 
     /** @test */
-    public function an_attribute_can_be_set()
+    public function an_schemaless_attribute_can_be_set()
     {
         $this->testModel->schemaless_attributes->name = 'value';
 
@@ -36,5 +36,30 @@ class HasSchemalessAttributesTest extends TestCase
         $this->testModel->save();
 
         $this->assertEquals('value', $this->testModel->fresh()->schemaless_attributes->name);
+    }
+
+    /** @test */
+    public function it_can_handle_an_array()
+    {
+        $array = [
+            'one' => 'value',
+            'two' => 'another value',
+        ];
+
+        $this->testModel->schemaless_attributes->array = $array;
+
+        $this->assertEquals($array, $this->testModel->schemaless_attributes->array);
+    }
+
+    /** @test */
+    public function it_can_forget_a_schemaless_attribute()
+    {
+        $this->testModel->schemaless_attributes->name = 'value';
+
+        $this->assertEquals('value', $this->testModel->schemaless_attributes->name);
+
+        $this->testModel->schemaless_attributes->forget('name');
+
+        $this->assertNull($this->testModel->schemaless_attributes->name);
     }
 }
