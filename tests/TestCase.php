@@ -5,6 +5,7 @@ namespace Spatie\SchemalessAttributes\Tests;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Orchestra\Testbench\TestCase as Orchestra;
+use Spatie\SchemalessAttributes\SchemalessAttributesServiceProvider;
 
 abstract class TestCase extends Orchestra
 {
@@ -18,7 +19,7 @@ abstract class TestCase extends Orchestra
     protected function getPackageProviders($app)
     {
         return [
-            \Spatie\SchemalessAttributes\SchemalessAttributesServiceProvider::class,
+            SchemalessAttributesServiceProvider::class,
         ];
     }
 

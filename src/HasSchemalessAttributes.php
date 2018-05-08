@@ -21,25 +21,24 @@ trait HasSchemalessAttributes
     }
 
     /*
-        public function setSchemalessAttributesAttribute($value)
-        {
-            [$one, $two, $three, $caller] = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 4);
+    public function setSchemalessAttributesAttribute($value)
+    {
+        [$one, $two, $three, $caller] = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 4);
 
-            if (count($caller['args'])) {
-                $propName = $caller['args'][0];
+        if (count($caller['args'])) {
+            $propName = $caller['args'][0];
 
-                $value = $caller['args'][1];
+            $value = $caller['args'][1];
 
-                SchemalessAttributes::createForModel($this, 'schemaless_attributes')->$propName = $value;
-            }
-            else {
-                // array being set replace all props
-            }
-
-            dump('in set');
-
-            return SchemalessAttributes::createForModel($this, 'schemaless_attributes');
+            SchemalessAttributes::createForModel($this, 'schemaless_attributes')->$propName = $value;
+        } else {
+            // array being set replace all props
         }
+
+        dump('in set');
+
+        return SchemalessAttributes::createForModel($this, 'schemaless_attributes');
+    }
     */
 
     public function addSchemalessAttributes(array $attributes): self
