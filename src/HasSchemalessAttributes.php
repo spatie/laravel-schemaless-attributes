@@ -20,14 +20,13 @@ trait HasSchemalessAttributes
     }
 
     /**
-    public function setSchemalessAttributesAttribute($value): self
-    {
-        $this->schemalessAttributes->replace($value);
-
-        return $this;
-    }
-    */
-
+     * public function setSchemalessAttributesAttribute($value): self
+     * {
+     * $this->schemalessAttributes->replace($value);.
+     *
+     * return $this;
+     * }
+     */
     public function addSchemalessAttributes(array $attributes): self
     {
         foreach ($attributes as $name => $value) {

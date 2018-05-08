@@ -209,7 +209,7 @@ class HasSchemalessAttributesTest extends TestCase
 
     protected function assertContainsModels(array $expectedModels, Collection $actualModels)
     {
-        $assertionFailedMessage = 'Expected ' . count($expectedModels) . ' models. Got ' . $actualModels->count() . ' models';
+        $assertionFailedMessage = 'Expected '.count($expectedModels).' models. Got '.$actualModels->count().' models';
 
         $this->assertEquals(count($expectedModels), $actualModels->count(), $assertionFailedMessage);
     }
