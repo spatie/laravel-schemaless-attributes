@@ -72,6 +72,19 @@ class HasSchemalessAttributesTest extends TestCase
     }
 
     /** @test */
+    public function it_can_set_all_schemaless_attributes_at_once()
+    {
+        $array = [
+            'rey' => ['side' => 'light'],
+            'snoke' => ['side' => 'dark']
+        ];
+
+        $this->testModel->schemaless_attributes = $array;
+
+        $this->assertEquals($array, $this->testModel->schemaless_attributes->all());
+    }
+
+    /** @test */
     public function it_can_forget_a_single_schemaless_attribute()
     {
         $this->testModel->schemaless_attributes->name = 'value';
@@ -216,7 +229,7 @@ class HasSchemalessAttributesTest extends TestCase
 
     protected function assertContainsModels(array $expectedModels, Collection $actualModels)
     {
-        $assertionFailedMessage = 'Expected '.count($expectedModels).' models. Got '.$actualModels->count().' models';
+        $assertionFailedMessage = 'Expected ' . count($expectedModels) . ' models. Got ' . $actualModels->count() . ' models';
 
         $this->assertEquals(count($expectedModels), $actualModels->count(), $assertionFailedMessage);
     }
