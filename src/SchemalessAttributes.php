@@ -2,10 +2,9 @@
 
 namespace Spatie\SchemalessAttributes;
 
-use ArrayAccess;
 use Countable;
+use ArrayAccess;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Collection;
 
 class SchemalessAttributes implements ArrayAccess, Countable
 {
@@ -39,7 +38,7 @@ class SchemalessAttributes implements ArrayAccess, Countable
 
     public function __set(string $name, $value)
     {
-        array_set($this->schemalessAttributes, $name , $value);
+        array_set($this->schemalessAttributes, $name, $value);
 
         $this->model->{$this->sourceAttributeName} = $this->schemalessAttributes;
     }

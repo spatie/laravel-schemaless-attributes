@@ -1,10 +1,9 @@
 <?php
 
 namespace Spatie\SchemalessAttributes\Tests;
-use Dotenv\Dotenv;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 abstract class TestCase extends Orchestra

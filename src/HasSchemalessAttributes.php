@@ -21,7 +21,7 @@ trait HasSchemalessAttributes
 
     public function addSchemalessAttributes(array $attributes): self
     {
-        foreach($attributes as $name => $value){
+        foreach ($attributes as $name => $value) {
             $this->schemaless_attributes->$name = $value;
         }
 
