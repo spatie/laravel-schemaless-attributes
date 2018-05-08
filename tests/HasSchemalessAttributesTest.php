@@ -52,7 +52,7 @@ class HasSchemalessAttributesTest extends TestCase
     }
 
     /** @test */
-    public function it_can_forget_a_schemaless_attribute()
+    public function it_can_forget_a_single_schemaless_attribute()
     {
         $this->testModel->schemaless_attributes->name = 'value';
 
@@ -61,5 +61,15 @@ class HasSchemalessAttributesTest extends TestCase
         $this->testModel->schemaless_attributes->forget('name');
 
         $this->assertNull($this->testModel->schemaless_attributes->name);
+    }
+
+    /** @test */
+    public function it_can_forget_a_schemaless_attribute_using_dot_notation()
+    {
+        $this->testModel->schemaless_attributes->member = ['name' => 'John', 'age' => 30];
+
+        $this->testModel->schemaless_attributes->forget('member.age');
+
+        $this->assertEquals($this->testModel->schemaless_attributes->member, ['name' => 'John']);
     }
 }
