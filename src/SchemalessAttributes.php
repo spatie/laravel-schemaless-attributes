@@ -12,6 +12,9 @@ class SchemalessAttributes
     /** @var string */
     protected $sourceAttributeName;
 
+    /** @var array */
+    protected $schemaless_attributes = [];
+
     public static function createForModel(Model $model, string $sourceAttributeName): self
     {
         return new static($model, $sourceAttributeName);
@@ -22,10 +25,26 @@ class SchemalessAttributes
         $this->model = $model;
 
         $this->sourceAttributeName = $sourceAttributeName;
+
+        $this->schemaless_attributes = $this->getRawSchemalessAttributes();
     }
 
     public function __get(string $name)
     {
-        return array_get($this->model->{$this->sourceAttributeName}, $name);
+        return array_get($this->schemaless_attributes, $name);
+    }
+
+    public function __set(string $name, $value)
+    {
+        $schemalessAttributes = $this->model->attributes[$this->sourceAttributeName];
+
+        array_set($schemalessAttributes, $name , $value);
+
+        $this->model->{$this->sourceAttributeName} = $schemalessAttributes;
+    }
+
+    protected function getRawSchemalessAttributes(): array
+    {
+        return json_decode($this->model->getAttributes()[$this->sourceAttributeName] ?? '{}', true);
     }
 }

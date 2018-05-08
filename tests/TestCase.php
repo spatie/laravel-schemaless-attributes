@@ -4,12 +4,11 @@ namespace Spatie\SchemalessAttributes\Tests;
 use Dotenv\Dotenv;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Schema;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 abstract class TestCase extends Orchestra
 {
-    use RefreshDatabase;
-
     public function setUp()
     {
         parent::setUp();
@@ -26,11 +25,11 @@ abstract class TestCase extends Orchestra
 
     protected function setUpDatabase()
     {
-        $this->app['db']->connection()->getSchemaBuilder()->create('test_models', function (Blueprint $table) {
+        Schema::dropIfExists('test_models');
+
+        Schema::create('test_models', function (Blueprint $table) {
             $table->increments('id');
             $table->schemalessAttributes();
         });
-
-        TestModel::create();
     }
 }

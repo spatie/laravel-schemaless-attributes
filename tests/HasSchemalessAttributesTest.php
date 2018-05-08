@@ -11,12 +11,20 @@ class HasSchemalessAttributesTest extends TestCase
     {
         parent::setUp();
 
-        $this->testModel = TestModel::first();
+        $this->testModel = TestModel::create();
     }
 
     /** @test */
-    public function getting_a_non_existing_attribute_returs_null()
+    public function getting_a_non_existing_attribute_returns_null()
     {
-        $this->assertNull($this->testModel->schemalessAttributes->non_existing);
+        $this->assertNull($this->testModel->schemaless_attributes->non_existing);
+    }
+
+    /** @test */
+    public function an_attribute_can_be_set()
+    {
+        $this->testModel->schemaless_attributes->name = 'value';
+
+        $this->assertEquals('value', $this->testModel->schemaless_attributes->name);
     }
 }
