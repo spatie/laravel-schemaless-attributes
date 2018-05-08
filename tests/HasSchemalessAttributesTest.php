@@ -80,4 +80,18 @@ class HasSchemalessAttributesTest extends TestCase
 
         $this->assertEquals(['name' => 'value'], $this->testModel->schemaless_attributes->all());
     }
+
+    /** @test */
+    public function it_will_use_the_correct_datatype()
+    {
+        $this->testModel->schemaless_attributes->bool = true;
+        $this->testModel->schemaless_attributes->float = 12.34;
+
+        $this->testModel->save();
+
+        $this->testModel->refresh();
+
+        $this->assertSame(true, $this->testModel->schemaless_attributes->bool);
+        $this->assertSame(12.34, $this->testModel->schemaless_attributes->float);
+    }
 }
