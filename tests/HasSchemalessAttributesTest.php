@@ -166,7 +166,6 @@ class HasSchemalessAttributesTest extends TestCase
             $model1, $model2
         ], TestModel::$scopeName(['name' => 'value', 'name2' => 'value2'])->get());
 
-        /*
         $this->assertContainsModels([
             $model3
         ], TestModel::$scopeName(['name' => 'value', 'name2' => 'value3'])->get());
@@ -187,7 +186,6 @@ class HasSchemalessAttributesTest extends TestCase
 
         $this->assertContainsModels([
         ], TestModel::$scopeName('name', 'non-existing-value')->get());
-        */
     }
 
     public function scopeNameProvider()
