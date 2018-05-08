@@ -76,7 +76,7 @@ class HasSchemalessAttributesTest extends TestCase
     {
         $array = [
             'rey' => ['side' => 'light'],
-            'snoke' => ['side' => 'dark']
+            'snoke' => ['side' => 'dark'],
         ];
 
         $this->testModel->schemaless_attributes = $array;

@@ -16,7 +16,6 @@ $yourModel->schemaless_attributes->name = 'value';
 $yourModel->schemaless_attributes->name; // returns 'value';
 
 // you can also use the array approach
-
 $yourModel->schemaless_attributes['name'] = 'value';
 $yourModel->schemaless_attributes['name'] // returns 'value';
 
