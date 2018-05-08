@@ -72,4 +72,12 @@ class HasSchemalessAttributesTest extends TestCase
 
         $this->assertEquals($this->testModel->schemaless_attributes->member, ['name' => 'John']);
     }
+
+    /** @test */
+    public function it_can_get_all_schemaless_attributes()
+    {
+        $this->testModel->schemaless_attributes->name = 'value';
+
+        $this->assertEquals(['name' => 'value'], $this->testModel->schemaless_attributes->all());
+    }
 }

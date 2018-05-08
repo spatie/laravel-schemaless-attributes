@@ -48,6 +48,11 @@ class SchemalessAttributes
         return $this;
     }
 
+    public function all(): array
+    {
+        return $this->getRawSchemalessAttributes();
+    }
+
     protected function getRawSchemalessAttributes(): array
     {
         return json_decode($this->model->getAttributes()[$this->sourceAttributeName] ?? '{}', true);
