@@ -163,18 +163,18 @@ class HasSchemalessAttributesTest extends TestCase
         ]);
 
         $this->assertContainsModels([
-            $model1, $model2
+            $model1, $model2,
         ], TestModel::$scopeName(['name' => 'value', 'name2' => 'value2'])->get());
 
         $this->assertContainsModels([
-            $model3
+            $model3,
         ], TestModel::$scopeName(['name' => 'value', 'name2' => 'value3'])->get());
 
         $this->assertContainsModels([
         ], TestModel::$scopeName(['name' => 'value', 'non-existing' => 'value'])->get());
 
         $this->assertContainsModels([
-            $model1, $model2, $model3
+            $model1, $model2, $model3,
         ], TestModel::$scopeName([])->get());
 
         $this->assertContainsModels([
@@ -198,9 +198,8 @@ class HasSchemalessAttributesTest extends TestCase
 
     protected function assertContainsModels(array $expectedModels, Collection $actualModels)
     {
-        $assertionFailedMessage = "Expected " . count($expectedModels) . ' models. Got ' . $actualModels->count() . ' models';
+        $assertionFailedMessage = 'Expected '.count($expectedModels).' models. Got '.$actualModels->count().' models';
 
         $this->assertEquals(count($expectedModels), $actualModels->count(), $assertionFailedMessage);
     }
-
 }
