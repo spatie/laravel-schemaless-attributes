@@ -48,7 +48,7 @@ The schemaless attributes will be stored in a json column on the table of your m
 
 ### Adding the column where the schemaless attributes will be stored
 
-Add a migration for all models where you want to add schemaless attributes to. You should use `schemalessAttributes` method on `Blueprint` to add a column. The argument you give to `schemalessAttributes` is the column name that will be added. You can use any name you'd like. In all examples of this readme we'll use `extra_attributes`
+Add a migration for all models where you want to add schemaless attributes to. You should use `schemalessAttributes` method on `Blueprint` to add a column. The argument you give to `schemalessAttributes` is the column name that will be added. You can use any name you'd like. You're also free to add as many schemeless attributes columns to your table as you want. In all examples of this readme we'll use a single column named `extra_attributes`.
 
 ```php
 Schema::table('your_models', function (Blueprint $table) {
