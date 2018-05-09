@@ -134,21 +134,18 @@ $yourModel->save(); // persists both normal and schemaless attributes
 
 ### Retrieving models with specific schemaless attributes
 
-The `HasSchemalessAttributes` trait provides a scopes to retrieve models with: `withSchemalessAttributes`.
+Here's how you can use the provided scope.
 
 ```php
 // returns all models that have all the given schemaless attributes
-$yourModel->withSchemalessAttributes(['name' => 'value', 'name2' => 'value2])->get();
+$yourModel->withExtraAttributes(['name' => 'value', 'name2' => 'value2])->get();
 ```
 
 If you only want to search on a single custom attribute, you can use the scope like this
 
 ```php
 // returns all models that have a schemaless attribute `name` set to `value`
-$yourModel->withSchemalessAttributes('name', 'value')->get();
-
-// to get a more natural feel there's also `withSchemalessAttribute` scope which is just an alias for `withSchemalessAttributes`
-$yourModel->withSchemalessAttribute('name', 'value')->get();
+$yourModel->withExtraAttributes('name', 'value')->get();
 ```
 
 ### Testing
