@@ -4,6 +4,7 @@ namespace Spatie\SchemalessAttributes;
 
 use Countable;
 use ArrayAccess;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class SchemalessAttributes implements ArrayAccess, Countable
@@ -93,5 +94,30 @@ class SchemalessAttributes implements ArrayAccess, Countable
     public function count()
     {
         return count($this->schemalessAttributes);
+    }
+
+    public static function scopeWithSchemalessAttributes(string $attributeName): Builder
+    {
+        $arguments = debug_backtrace()[1]['args'];
+
+        if (count($arguments) === 1) {
+            [$builder] = $arguments;
+            $schemalessAttributes = [];
+        }
+
+        if (count($arguments) === 2) {
+            [$builder, $schemalessAttributes] = $arguments;
+        }
+
+        if (count($arguments) >= 3) {
+            [$builder, $name, $value] = $arguments;
+            $schemalessAttributes = [$name => $value];
+        }
+
+        foreach ($schemalessAttributes as $name => $value) {
+            $builder->where("{$attributeName}->{$name}", $value);
+        }
+
+        return $builder;
     }
 }

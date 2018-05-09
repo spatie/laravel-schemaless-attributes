@@ -3,13 +3,11 @@
 namespace Spatie\SchemalessAttributes\Tests;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Query\Builder;
-use Spatie\SchemalessAttributes\HasSchemalessAttributes;
+use Illuminate\Database\Eloquent\Builder;
+use Spatie\SchemalessAttributes\SchemalessAttributes;
 
 class TestModel extends Model
 {
-    use HasSchemalessAttributes;
-
     public $timestamps = false;
 
     public $guarded = [];
@@ -17,5 +15,15 @@ class TestModel extends Model
     public $casts = [
         'schemaless_attributes' => 'array'
     ];
+
+    public function getSchemalessAttributesAttribute(): SchemalessAttributes
+    {
+        return SchemalessAttributes::createForModel($this, 'schemaless_attributes');
+    }
+
+    public function scopeWithSchemalessAttributes(): Builder
+    {
+        return SchemalessAttributes::scopeWithSchemalessAttributes('schemaless_attributes');
+    }
 
 }

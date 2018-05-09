@@ -167,14 +167,8 @@ class HasSchemalessAttributesTest extends TestCase
         $this->assertEquals($array, $testModel->schemaless_attributes->all());
     }
 
-    /**
-     * @test
-     *
-     * @dataProvider scopeNameProvider
-     *
-     * @param string $scopeName
-     */
-    public function it_has_a_scope_to_get_models_with_the_given_schemaless_attributes(string $scopeName)
+    /** @test */
+    public function it_has_a_scope_to_get_models_with_the_given_schemaless_attributes()
     {
         TestModel::truncate();
 
@@ -195,36 +189,28 @@ class HasSchemalessAttributesTest extends TestCase
 
         $this->assertContainsModels([
             $model1, $model2,
-        ], TestModel::$scopeName(['name' => 'value', 'name2' => 'value2'])->get());
+        ], TestModel::withSchemalessAttributes(['name' => 'value', 'name2' => 'value2'])->get());
 
         $this->assertContainsModels([
             $model3,
-        ], TestModel::$scopeName(['name' => 'value', 'name2' => 'value3'])->get());
+        ], TestModel::withSchemalessAttributes(['name' => 'value', 'name2' => 'value3'])->get());
 
         $this->assertContainsModels([
-        ], TestModel::$scopeName(['name' => 'value', 'non-existing' => 'value'])->get());
-
-        $this->assertContainsModels([
-            $model1, $model2, $model3,
-        ], TestModel::$scopeName([])->get());
+        ], TestModel::withSchemalessAttributes(['name' => 'value', 'non-existing' => 'value'])->get());
 
         $this->assertContainsModels([
             $model1, $model2, $model3,
-        ], TestModel::$scopeName('name', 'value')->get());
+        ], TestModel::withSchemalessAttributes([])->get());
 
         $this->assertContainsModels([
-        ], TestModel::$scopeName('name', 'non-existing-value')->get());
+            $model1, $model2, $model3,
+        ], TestModel::withSchemalessAttributes('name', 'value')->get());
 
         $this->assertContainsModels([
-        ], TestModel::$scopeName('name', 'non-existing-value')->get());
-    }
+        ], TestModel::withSchemalessAttributes('name', 'non-existing-value')->get());
 
-    public function scopeNameProvider()
-    {
-        return [
-            ['withSchemalessAttribute'],
-            ['withSchemalessAttributes'],
-        ];
+        $this->assertContainsModels([
+        ], TestModel::withSchemalessAttributes('name', 'non-existing-value')->get());
     }
 
     protected function assertContainsModels(array $expectedModels, Collection $actualModels)

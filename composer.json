@@ -18,7 +18,8 @@
     "require": {
         "php": "^7.1",
         "illuminate/database": "^5.6",
-        "illuminate/support": "^5.6"
+        "illuminate/support": "^5.6",
+        "spatie/string": "^2.2"
     },
     "require-dev": {
         "larapack/dd": "^1.0",
