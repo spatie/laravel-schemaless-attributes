@@ -32,6 +32,9 @@ $yourModel->schemaless_attributes->get('rey.side'); // returns 'light';
 $yourModel->withSchemalessAttributes(['name' => 'value', 'name2' => 'value2])->get();
 ```
 
+## Requirements
+
+This package requires a database with support for `json` columns like MySQL 5.7 or higher
 
 ## Installation
 
@@ -41,14 +44,35 @@ You can install the package via composer:
 composer require spatie/laravel-schemaless-attributes
 ```
 
-## Usage
+Add a migration for all models where you want to add schemaless attributes to. You can use `schemalessAttributes` method on `Blueprint` to add the right column.
 
-``` php
-$skeleton = new Spatie\Skeleton();
-echo $skeleton->echoPhrase('Hello, Spatie!');
+```php
+Schema::table('your_models', function (Blueprint $table) {
+    $table->schemalessAttributes();
+});
 ```
 
+Finally add the `Spatie\SchemalessAttributes\HasSchemalessAttributes` to your model.
+
+```php
+use Illuminate\Database\Eloquent\Model;
+use Spatie\SchemalessAttributes\HasSchemalessAttributes;
+
+class YourModel extends Model
+{
+    use HasSchemalessAttributes;
+
+    ...
+}
+```
+
+## Usage
+
+Coming soon...
+
 ### Testing
+
+First create a mysql database named `laravel_schemaless_attributes`. After that you can run the tests with:
 
 ``` bash
 composer test
