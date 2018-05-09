@@ -70,7 +70,7 @@ class TestModel extends Model
     ...
 
     public $casts = [
-        'extra_attributes' => 'array'
+        'extra_attributes' => 'array',
     ];
 
     public function getExtraAttributesAttribute(): SchemalessAttributes
