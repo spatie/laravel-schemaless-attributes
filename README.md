@@ -22,7 +22,7 @@ $yourModel->extra_attributes['name'] // returns 'value'
 // setting multiple values in one go
 $yourModel->extra_attributes = [
    'rey' => ['side' => 'light'], 
-   'snoke' => ['side' => 'dark']
+   'snoke' => ['side' => 'dark'],
 ];
 
 // retrieving values using dot notation
