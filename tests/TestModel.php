@@ -25,5 +25,4 @@ class TestModel extends Model
     {
         return SchemalessAttributes::scopeWithSchemalessAttributes('schemaless_attributes');
     }
-
 }

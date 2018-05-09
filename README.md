@@ -8,25 +8,25 @@
 
 Wouldn't it be cool if you could just have a bit of the spirit of nosql available in Eloquent? This package does just that. It provides a trait that, when applied on a model, allows you to store arbritrary values in your model.
 
-Here are a few examples
+Here are a few examples. We're using the `extra_attributes` column here, but you can name that [however you want](#TODO). 
 
 ```php
 // add and retrieve an attribute
-$yourModel->schemaless_attributes->name = 'value';
-$yourModel->schemaless_attributes->name; // returns 'value';
+$yourModel->extra_attributes->name = 'value';
+$yourModel->extra_attributes->name; // returns 'value';
 
 // you can also use the array approach
-$yourModel->schemaless_attributes['name'] = 'value';
-$yourModel->schemaless_attributes['name'] // returns 'value';
+$yourModel->extra_attributes['name'] = 'value';
+$yourModel->extra_attributes['name'] // returns 'value';
 
 // setting multiple values in one go
-$yourModel->schemaless_attributes = [
+$yourModel->extra_attributes = [
    'rey' => ['side' => 'light'], 
    'snoke' => ['side' => 'dark']
 ];
 
 // retrieving values using dot notation
-$yourModel->schemaless_attributes->get('rey.side'); // returns 'light';
+$yourModel->extra_attributes->get('rey.side'); // returns 'light';
 
 // it has a scope to retrieve all models with the given schemaless attributes
 $yourModel->withSchemalessAttributes(['name' => 'value', 'name2' => 'value2])->get();
@@ -44,24 +44,45 @@ You can install the package via composer:
 composer require spatie/laravel-schemaless-attributes
 ```
 
-Add a migration for all models where you want to add schemaless attributes to. You can use `schemalessAttributes` method on `Blueprint` to add the right column.
+The schemaless attributes will be stored in a json column on the table of your model. Let's add that column and prepare the model. 
+
+### Adding the column where the schemaless attributes will be stored
+
+Add a migration for all models where you want to add schemaless attributes to. You should use `schemalessAttributes` method on `Blueprint` to add a column. The argument you give to `schemalessAttributes` is the column name that will be added. You can use any name you'd like. In all examples of this readme we'll use `extra_attributes`
 
 ```php
 Schema::table('your_models', function (Blueprint $table) {
-    $table->schemalessAttributes();
+    $table->schemalessAttributes('extra_attributes');
 });
 ```
 
-Finally add the `Spatie\SchemalessAttributes\HasSchemalessAttributes` to your model.
+### Preparing the model
+
+In order to work with the schemaless attributes you'll need to add a cast, an accessor and a scope on your model. Here's an example of what you need to add if you've chosen `extra_attributes` as your column name.
 
 ```php
 use Illuminate\Database\Eloquent\Model;
-use Spatie\SchemalessAttributes\HasSchemalessAttributes;
+use Illuminate\Database\Eloquent\Builder;
+use Spatie\SchemalessAttributes\SchemalessAttributes;
 
-class YourModel extends Model
+class TestModel extends Model
 {
-    use HasSchemalessAttributes;
+    ...
 
+    public $casts = [
+        'extra_attributes' => 'array'
+    ];
+
+    public function getExtraAttributesAttribute(): SchemalessAttributes
+    {
+        return SchemalessAttributes::createForModel($this, 'extra_attributes');
+    }
+
+    public function scopeWithExtraAttributes(): Builder
+    {
+        return SchemalessAttributes::scopeWithSchemalessAttributes('extra_attributes');
+    }
+    
     ...
 }
 ```
@@ -73,34 +94,34 @@ class YourModel extends Model
 This is the easiest way to get and set schemaless attributes:
 
 ```php
-$yourModel->schemaless_attributes->name = 'value';
-$yourModel->schemaless_attributes->name; // returns 'value';
+$yourModel->extra_attributes->name = 'value';
+$yourModel->extra_attributes->name; // returns 'value';
 ```
 
 Alternatively you can use an array approach:
 
 ```php
-$yourModel->schemaless_attributes['name'] = 'value';
-$yourModel->schemaless_attributes['name'] // returns 'value';
+$yourModel->extra_attributes['name'] = 'value';
+$yourModel->extra_attributes['name'] // returns 'value';
 ```
 
 You can replace all existing schemaless attributes by assigning an array to it.
 
 ```php
 // all existing schemaless attributes will be replaced
-$yourModel->schemaless_attributes = ['name' => 'value'];
-$yourModel->schemaless_attributes->all(); // returns ['name' => 'value']
+$yourModel->extra_attributes = ['name' => 'value'];
+$yourModel->extra_attributes->all(); // returns ['name' => 'value']
 ```
 
 You can also opt to use `get` and `set`. The methods have support for dot notation.
 
 ```
-$yourModel->schemaless_attributes = [
+$yourModel->extra_attributes = [
    'rey' => ['side' => 'light'], 
    'snoke' => ['side' => 'dark']
 ];
-$yourModel->schemaless_attributes->set('rey.side', 'dark');
-$yourModel->schemaless_attributes->get('rey.side'); // returns 'dark
+$yourModel->extra_attributes->set('rey.side', 'dark');
+$yourModel->extra_attributes->get('rey.side'); // returns 'dark
 ```
 
 ### Persisting schemaless attributes
@@ -132,7 +153,7 @@ $yourModel->withSchemalessAttribute('name', 'value')->get();
 
 ### Testing
 
-First create a mysql database named `laravel_schemaless_attributes`. After that you can run the tests with:
+First create a mysql database named `laravel_extra_attributes`. After that you can run the tests with:
 
 ``` bash
 composer test
