@@ -6,7 +6,7 @@
 [![StyleCI](https://styleci.io/repos/132581720/shield?branch=master)](https://styleci.io/repos/132581720)
 [![Total Downloads](https://img.shields.io/packagist/dt/spatie/laravel-schemaless-attributes.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-schemaless-attributes)
 
-Wouldn't it be cool if you could just have a bit of the spirit of nosql available in Eloquent? This package does just that. It provides a trait that, when applied on a model, allow you to store arbritrary values in your model.
+Wouldn't it be cool if you could just have a bit of the spirit of nosql available in Eloquent? This package does just that. It provides a trait that, when applied on a model, allows you to store arbritrary values in your model.
 
 Here are a few examples
 
@@ -68,7 +68,67 @@ class YourModel extends Model
 
 ## Usage
 
-Coming soon...
+### Getting and setting schemaless attributes
+
+This is the easiest way to get and set schemaless attributes.
+
+```php
+$yourModel->schemaless_attributes->name = 'value';
+$yourModel->schemaless_attributes->name; // returns 'value';
+```
+
+Alternatively you can use an array approach.
+
+```php
+$yourModel->schemaless_attributes['name'] = 'value';
+$yourModel->schemaless_attributes['name'] // returns 'value';
+```
+
+You can replace all schemaless_attributes by assigning an array to it.
+
+```php
+// all existing schemaless attributes will be replaced.
+$yourModel->schemaless_attributes = ['name' => 'value'];
+$yourModel->schemaless_attributes->all(); // returns ['name' => 'value']
+```
+
+You can also opt to use `get` and `set`. The methods have support for dot notation.
+
+```
+$yourModel->schemaless_attributes = [
+   'rey' => ['side' => 'light'], 
+   'snoke' => ['side' => 'dark']
+];
+$yourModel->schemaless_attributes->set('rey.side', 'dark');
+$yourModel->schemaless_attributes->get('rey.side'); // returns 'dark
+```
+
+### Persisting schemaless attributes
+
+To persist schemaless attributes you should, just like you do for normal attributes call `save()` on the model.
+
+```php
+$yourModel->save(); // saves both normal and schemaless attributes
+```
+
+### Retrieving models with specific schemaless attributes
+
+The `HasSchemalessAttributes` trait provides a scopes to retrieve models with: `withSchemalessAttributes`.
+
+```php
+// returns all models that have all the given schemaless attributes
+$yourModel->withSchemalessAttributes(['name' => 'value', 'name2' => 'value2])->get();
+```
+
+If you only want to search on a single custom attribute, you can use the scope like this
+
+```php
+// returns all models that have a schemaless attribute `name` set to `value`
+$yourModel->withSchemalessAttributes('name', 'value')->get();
+
+// to get a more natural feel there's also `withSchemalessAttribute` scope which is just an alias for `withSchemalessAttributes`
+$yourModel->withSchemalessAttribute('name', 'value')->get();
+```
 
 ### Testing
 
