@@ -34,7 +34,7 @@ $yourModel->withSchemalessAttributes(['name' => 'value', 'name2' => 'value2])->g
 
 ## Requirements
 
-This package requires a database with support for `json` columns like MySQL 5.7 or higher
+This package requires a database with support for `json` columns like MySQL 5.7 or higher.
 
 ## Installation
 
