@@ -27,6 +27,9 @@ $yourModel->schemaless_attributes = [
 
 // retrieving values using dot notation
 $yourModel->schemaless_attributes->get('rey.side'); // returns 'light';
+
+// it has a scope to retrieve all models with the given schemaless attributes
+$yourModel->withSchemalessAttributes(['name' => 'value', 'name2' => 'value2])->get();
 ```
 
 
