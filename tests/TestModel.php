@@ -13,7 +13,7 @@ class TestModel extends Model
     public $guarded = [];
 
     public $casts = [
-        'schemaless_attributes' => 'array'
+        'schemaless_attributes' => 'array',
     ];
 
     public function getSchemalessAttributesAttribute(): SchemalessAttributes
