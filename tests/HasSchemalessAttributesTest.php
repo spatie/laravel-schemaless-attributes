@@ -162,7 +162,7 @@ class HasSchemalessAttributesTest extends TestCase
             'name2' => 'value2',
         ];
 
-        $testModel = TestModel::create()->addSchemalessAttributes($array);
+        $testModel = TestModel::create(['schemaless_attributes' => $array]);
 
         $this->assertEquals($array, $testModel->schemaless_attributes->all());
     }
@@ -178,20 +178,20 @@ class HasSchemalessAttributesTest extends TestCase
     {
         TestModel::truncate();
 
-        $model1 = TestModel::create()->addSchemalessAttributes([
+        $model1 = TestModel::create(['schemaless_attributes' => [
             'name' => 'value',
             'name2' => 'value2',
-        ]);
+        ]]);
 
-        $model2 = TestModel::create()->addSchemalessAttributes([
+        $model2 = TestModel::create(['schemaless_attributes' => [
             'name' => 'value',
             'name2' => 'value2',
-        ]);
+        ]]);
 
-        $model3 = TestModel::create()->addSchemalessAttributes([
+        $model3 = TestModel::create(['schemaless_attributes' => [
             'name' => 'value',
             'name2' => 'value3',
-        ]);
+        ]]);
 
         $this->assertContainsModels([
             $model1, $model2,

@@ -6,30 +6,9 @@ use Illuminate\Database\Eloquent\Builder;
 
 trait HasSchemalessAttributes
 {
-    public function getCasts(): array
-    {
-        return array_merge(
-            parent::getCasts(),
-            ['schemaless_attributes' => 'array']
-        );
-    }
-
     public function getSchemalessAttributesAttribute(): SchemalessAttributes
     {
         return SchemalessAttributes::createForModel($this, 'schemaless_attributes');
-    }
-
-    public function addSchemalessAttributes(array $attributes): self
-    {
-        foreach ($attributes as $name => $value) {
-            $this->schemaless_attributes->$name = $value;
-        }
-
-        $this->save();
-
-        $this->refresh();
-
-        return $this;
     }
 
     public function scopeWithSchemalessAttribute(): Builder
