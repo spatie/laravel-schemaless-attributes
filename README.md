@@ -115,10 +115,10 @@ $yourModel->extra_attributes->all(); // returns ['name' => 'value']
 
 You can also opt to use `get` and `set`. The methods have support for dot notation.
 
-```
+```php
 $yourModel->extra_attributes = [
    'rey' => ['side' => 'light'], 
-   'snoke' => ['side' => 'dark']
+   'snoke' => ['side' => 'dark'],
 ];
 $yourModel->extra_attributes->set('rey.side', 'dark');
 $yourModel->extra_attributes->get('rey.side'); // returns 'dark
