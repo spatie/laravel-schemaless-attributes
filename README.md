@@ -13,11 +13,11 @@ Here are a few examples. We're using the `extra_attributes` column here, but you
 ```php
 // add and retrieve an attribute
 $yourModel->extra_attributes->name = 'value';
-$yourModel->extra_attributes->name; // returns 'value';
+$yourModel->extra_attributes->name; // returns 'value'
 
 // you can also use the array approach
 $yourModel->extra_attributes['name'] = 'value';
-$yourModel->extra_attributes['name'] // returns 'value';
+$yourModel->extra_attributes['name'] // returns 'value'
 
 // setting multiple values in one go
 $yourModel->extra_attributes = [
@@ -26,7 +26,7 @@ $yourModel->extra_attributes = [
 ];
 
 // retrieving values using dot notation
-$yourModel->extra_attributes->get('rey.side'); // returns 'light';
+$yourModel->extra_attributes->get('rey.side'); // returns 'light'
 
 // it has a scope to retrieve all models with the given schemaless attributes
 $yourModel->withSchemalessAttributes(['name' => 'value', 'name2' => 'value2])->get();
@@ -95,14 +95,14 @@ This is the easiest way to get and set schemaless attributes:
 
 ```php
 $yourModel->extra_attributes->name = 'value';
-$yourModel->extra_attributes->name; // returns 'value';
+$yourModel->extra_attributes->name; // returns 'value'
 ```
 
 Alternatively you can use an array approach:
 
 ```php
 $yourModel->extra_attributes['name'] = 'value';
-$yourModel->extra_attributes['name'] // returns 'value';
+$yourModel->extra_attributes['name']; // returns 'value'
 ```
 
 You can replace all existing schemaless attributes by assigning an array to it.
