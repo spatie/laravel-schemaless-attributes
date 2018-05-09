@@ -8,7 +8,7 @@
 
 Wouldn't it be cool if you could just have a bit of the spirit of nosql available in Eloquent? This package does just that. It provides a trait that, when applied on a model, allows you to store arbritrary values in your model.
 
-Here are a few examples. We're using the `extra_attributes` column here, but you can name that [however you want](#TODO). 
+Here are a few examples. We're using the `extra_attributes` column here, but you can name that [however you want](#adding-the-column-where-the-schemaless-attributes-will-be-stored). 
 
 ```php
 // add and retrieve an attribute
