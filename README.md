@@ -70,24 +70,24 @@ class YourModel extends Model
 
 ### Getting and setting schemaless attributes
 
-This is the easiest way to get and set schemaless attributes.
+This is the easiest way to get and set schemaless attributes:
 
 ```php
 $yourModel->schemaless_attributes->name = 'value';
 $yourModel->schemaless_attributes->name; // returns 'value';
 ```
 
-Alternatively you can use an array approach.
+Alternatively you can use an array approach:
 
 ```php
 $yourModel->schemaless_attributes['name'] = 'value';
 $yourModel->schemaless_attributes['name'] // returns 'value';
 ```
 
-You can replace all schemaless_attributes by assigning an array to it.
+You can replace all existing schemaless attributes by assigning an array to it.
 
 ```php
-// all existing schemaless attributes will be replaced.
+// all existing schemaless attributes will be replaced
 $yourModel->schemaless_attributes = ['name' => 'value'];
 $yourModel->schemaless_attributes->all(); // returns ['name' => 'value']
 ```
@@ -105,10 +105,10 @@ $yourModel->schemaless_attributes->get('rey.side'); // returns 'dark
 
 ### Persisting schemaless attributes
 
-To persist schemaless attributes you should, just like you do for normal attributes call `save()` on the model.
+To persist schemaless attributes you should, just like you do for normal attributes, call `save()` on the model.
 
 ```php
-$yourModel->save(); // saves both normal and schemaless attributes
+$yourModel->save(); // persists both normal and schemaless attributes
 ```
 
 ### Retrieving models with specific schemaless attributes
