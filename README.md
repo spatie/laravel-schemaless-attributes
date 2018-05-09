@@ -95,6 +95,7 @@ This is the easiest way to get and set schemaless attributes:
 
 ```php
 $yourModel->extra_attributes->name = 'value';
+
 $yourModel->extra_attributes->name; // returns 'value'
 ```
 
@@ -102,6 +103,7 @@ Alternatively you can use an array approach:
 
 ```php
 $yourModel->extra_attributes['name'] = 'value';
+
 $yourModel->extra_attributes['name']; // returns 'value'
 ```
 
@@ -121,6 +123,7 @@ $yourModel->extra_attributes = [
    'snoke' => ['side' => 'dark'],
 ];
 $yourModel->extra_attributes->set('rey.side', 'dark');
+
 $yourModel->extra_attributes->get('rey.side'); // returns 'dark
 ```
 
