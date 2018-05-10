@@ -31,6 +31,16 @@ class HasSchemalessAttributesTest extends TestCase
     }
 
     /** @test */
+    public function it_can_determine_if_it_has_a_schemaless_attribute()
+    {
+        $this->assertFalse($this->testModel->schemaless_attributes->has('name'));
+
+        $this->testModel->schemaless_attributes->name = 'value';
+
+        $this->assertTrue($this->testModel->schemaless_attributes->has('name'));
+    }
+
+    /** @test */
     public function schemaless_attributes_will_get_saved_with_the_model()
     {
         $this->testModel->schemaless_attributes->name = 'value';

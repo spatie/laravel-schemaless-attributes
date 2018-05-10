@@ -54,6 +54,11 @@ class SchemalessAttributes implements ArrayAccess, Countable
         $this->model->{$this->sourceAttributeName} = $this->schemalessAttributes;
     }
 
+    public function has(string $name): bool
+    {
+        return array_has($this->schemalessAttributes, $name);
+    }
+
     public function forget(string $name): self
     {
         $this->model->{$this->sourceAttributeName} = array_except($this->schemalessAttributes, $name);
@@ -73,7 +78,7 @@ class SchemalessAttributes implements ArrayAccess, Countable
 
     public function offsetExists($offset)
     {
-        return array_has($this->schemalessAttributes, $offset);
+        return $this->has($offset);
     }
 
     public function offsetGet($offset)
