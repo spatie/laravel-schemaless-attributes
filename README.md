@@ -98,10 +98,10 @@ use Spatie\SchemalessAttributes\SchemalessAttributes;
 
 trait HasSchemalessAttributes
 {
-     public function getExtraAttributesAttribute(): SchemalessAttributes
-     {
-        return SchemalessAttributes::createForModel($this, 'extra_attributes');
-     }
+    public function getExtraAttributesAttribute(): SchemalessAttributes
+    {
+       return SchemalessAttributes::createForModel($this, 'extra_attributes');
+    }
 
     public function scopeWithExtraAttributes(): Builder
     {
