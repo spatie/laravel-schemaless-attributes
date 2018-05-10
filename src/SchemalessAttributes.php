@@ -71,11 +71,6 @@ class SchemalessAttributes implements ArrayAccess, Countable
         return $this->getRawSchemalessAttributes();
     }
 
-    protected function getRawSchemalessAttributes(): array
-    {
-        return json_decode($this->model->getAttributes()[$this->sourceAttributeName] ?? '{}', true);
-    }
-
     public function offsetExists($offset)
     {
         return $this->has($offset);
@@ -124,5 +119,10 @@ class SchemalessAttributes implements ArrayAccess, Countable
         }
 
         return $builder;
+    }
+
+    protected function getRawSchemalessAttributes(): array
+    {
+        return json_decode($this->model->getAttributes()[$this->sourceAttributeName] ?? '{}', true);
     }
 }
