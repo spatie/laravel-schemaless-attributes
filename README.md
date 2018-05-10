@@ -90,7 +90,7 @@ class TestModel extends Model
 If you want to reuse this behaviour across multiple models you could opt to put the function in a trait of your own. Here's what that trait could look like:
 
 ```php
-namespace App\Models\Concerns
+namespace App\Models\Concerns;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
@@ -99,14 +99,14 @@ use Spatie\SchemalessAttributes\SchemalessAttributes;
 trait HasSchemalessAttributes
 {
      public function getExtraAttributesAttribute(): SchemalessAttributes
-        {
-            return SchemalessAttributes::createForModel($this, 'extra_attributes');
-        }
-    
-        public function scopeWithExtraAttributes(): Builder
-        {
-            return SchemalessAttributes::scopeWithSchemalessAttributes('extra_attributes');
-        }
+     {
+        return SchemalessAttributes::createForModel($this, 'extra_attributes');
+     }
+
+    public function scopeWithExtraAttributes(): Builder
+    {
+        return SchemalessAttributes::scopeWithSchemalessAttributes('extra_attributes');
+    }
 }
 ```
 
