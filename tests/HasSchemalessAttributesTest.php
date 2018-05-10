@@ -213,6 +213,18 @@ class HasSchemalessAttributesTest extends TestCase
         ], TestModel::withSchemalessAttributes('name', 'non-existing-value')->get());
     }
 
+    /** @test */
+    public function it_can_set_multiple_attributes_one_after_the_other()
+    {
+        $this->testModel->schemaless_attributes->name = 'value';
+        $this->testModel->schemaless_attributes->name2 = 'value2';
+
+        $this->assertEquals([
+            'name' => 'value',
+            'name2' => 'value2',
+        ], $this->testModel->schemaless_attributes->all());
+    }
+
     protected function assertContainsModels(array $expectedModels, Collection $actualModels)
     {
         $assertionFailedMessage = 'Expected '.count($expectedModels).' models. Got '.$actualModels->count().' models';
