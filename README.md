@@ -204,7 +204,7 @@ public function __get($key)
 With the `__get` method in place you can do this:
 
 ```php
-$yourModel->extra_property; // Returns 'value'
+$yourModel->extra_property; // returns 'value'
 ```
 
 ## Testing
