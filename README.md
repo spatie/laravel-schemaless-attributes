@@ -6,9 +6,9 @@
 [![StyleCI](https://styleci.io/repos/132581720/shield?branch=master)](https://styleci.io/repos/132581720)
 [![Total Downloads](https://img.shields.io/packagist/dt/spatie/laravel-schemaless-attributes.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-schemaless-attributes)
 
-Wouldn't it be cool if you could just have a bit of the spirit of nosql available in Eloquent? This package does just that. It provides a trait that, when applied on a model, allows you to store arbritrary values in your model.
+Wouldn't it be cool if you could have a bit of the spirit of NoSQL available in Eloquent? This package does just that. It provides a trait that when applied on a model, allows you to store arbritrary values in a single JSON column.
 
-Here are a few examples. We're using the `extra_attributes` column here, but you can name that [however you want](#adding-the-column-where-the-schemaless-attributes-will-be-stored). 
+Here are a few examples. We're using the `extra_attributes` column here, but you can name it [whatever you want](#adding-the-column-where-the-schemaless-attributes-will-be-stored).
 
 ```php
 // add and retrieve an attribute
@@ -21,7 +21,7 @@ $yourModel->extra_attributes['name'] // returns 'value'
 
 // setting multiple values in one go
 $yourModel->extra_attributes = [
-   'rey' => ['side' => 'light'], 
+   'rey' => ['side' => 'light'],
    'snoke' => ['side' => 'dark'],
 ];
 
@@ -44,11 +44,11 @@ You can install the package via composer:
 composer require spatie/laravel-schemaless-attributes
 ```
 
-The schemaless attributes will be stored in a json column on the table of your model. Let's add that column and prepare the model. 
+The schemaless attributes will be stored in a json column on the table of your model. Let's add that column and prepare the model.
 
 ### Adding the column where the schemaless attributes will be stored
 
-Add a migration for all models where you want to add schemaless attributes to. You should use `schemalessAttributes` method on `Blueprint` to add a column. The argument you give to `schemalessAttributes` is the column name that will be added. You can use any name you'd like. You're also free to add as many schemeless attributes columns to your table as you want. In all examples of this readme we'll use a single column named `extra_attributes`.
+Add a migration for all models where you want to add schemaless attributes to. You should use `schemalessAttributes` method on `Blueprint` to add a column. The argument you give to `schemalessAttributes` is the column name that will be added. You can use any name you'd like. You're also free to add as many schemaless attribute columns to your table as you want. In all examples of this readme we'll use a single column named `extra_attributes`.
 
 ```php
 Schema::table('your_models', function (Blueprint $table) {
@@ -67,7 +67,7 @@ use Spatie\SchemalessAttributes\SchemalessAttributes;
 
 class TestModel extends Model
 {
-    ...
+    // ...
 
     public $casts = [
         'extra_attributes' => 'array',
@@ -82,8 +82,8 @@ class TestModel extends Model
     {
         return SchemalessAttributes::scopeWithSchemalessAttributes('extra_attributes');
     }
-    
-    ...
+
+    // ...
 }
 ```
 
@@ -119,7 +119,7 @@ This is the easiest way to get and set schemaless attributes:
 ```php
 $yourModel->extra_attributes->name = 'value';
 
-$yourModel->extra_attributes->name; // returns 'value'
+$yourModel->extra_attributes->name; // Returns 'value'
 ```
 
 Alternatively you can use an array approach:
@@ -127,27 +127,27 @@ Alternatively you can use an array approach:
 ```php
 $yourModel->extra_attributes['name'] = 'value';
 
-$yourModel->extra_attributes['name']; // returns 'value'
+$yourModel->extra_attributes['name']; // Returns 'value'
 ```
 
 You can replace all existing schemaless attributes by assigning an array to it.
 
 ```php
-// all existing schemaless attributes will be replaced
+// All existing schemaless attributes will be replaced
 $yourModel->extra_attributes = ['name' => 'value'];
-$yourModel->extra_attributes->all(); // returns ['name' => 'value']
+$yourModel->extra_attributes->all(); // Returns ['name' => 'value']
 ```
 
 You can also opt to use `get` and `set`. The methods have support for dot notation.
 
 ```php
 $yourModel->extra_attributes = [
-   'rey' => ['side' => 'light'], 
+   'rey' => ['side' => 'light'],
    'snoke' => ['side' => 'dark'],
 ];
 $yourModel->extra_attributes->set('rey.side', 'dark');
 
-$yourModel->extra_attributes->get('rey.side'); // returns 'dark
+$yourModel->extra_attributes->get('rey.side'); // Returns 'dark
 ```
 
 ### Persisting schemaless attributes
@@ -155,7 +155,7 @@ $yourModel->extra_attributes->get('rey.side'); // returns 'dark
 To persist schemaless attributes you should, just like you do for normal attributes, call `save()` on the model.
 
 ```php
-$yourModel->save(); // persists both normal and schemaless attributes
+$yourModel->save(); // Persists both normal and schemaless attributes
 ```
 
 ### Retrieving models with specific schemaless attributes
@@ -163,7 +163,7 @@ $yourModel->save(); // persists both normal and schemaless attributes
 Here's how you can use the provided scope.
 
 ```php
-// returns all models that have all the given schemaless attributes
+// Returns all models that have all the given schemaless attributes
 $yourModel->withExtraAttributes(['name' => 'value', 'name2' => 'value2])->get();
 ```
 
@@ -179,37 +179,37 @@ $yourModel->withExtraAttributes('name', 'value')->get();
 This is the default way of setting / getting a schemaless attribute:
 
 ```php
-// let's first set a value
+// Let's set a value first
 $yourModel->extra_attributes->extra_property = 'value';
 
-// and then get it
+// And then get it
 $yourModel->extra_attributes->extra_property; // returns 'value'
 ```
 
 You can make the getting part a bit shorter by overriding the `__get` method on your model like this:
 
 ```
-// on your model
+// In your model
 
 public function __get($key)
 {
     if ($this->extra_attributes->has($key)) {
         return $this->extra_attributes->get($key);
     }
-    
+
     return parent::__get($key);
 }
 ```
 
-With the in place you can do this:
+With the `__get` method in place you can do this:
 
 ```php
-$yourModel->extra_property; // returns 'value'
+$yourModel->extra_property; // Returns 'value'
 ```
 
 ## Testing
 
-First create a mysql database named `laravel_extra_attributes`. After that you can run the tests with:
+First create a MySQL database named `laravel_extra_attributes`. After that you can run the tests with:
 
 ``` bash
 composer test
@@ -244,7 +244,7 @@ We publish all received postcards [on our company website](https://spatie.be/en/
 
 Spatie is a webdesign agency based in Antwerp, Belgium. You'll find an overview of all our open source projects [on our website](https://spatie.be/opensource).
 
-Does your business depend on our contributions? Reach out and support us on [Patreon](https://www.patreon.com/spatie). 
+Does your business depend on our contributions? Reach out and support us on [Patreon](https://www.patreon.com/spatie).
 All pledges will be dedicated to allocating workforce on maintenance and new awesome stuff.
 
 ## License
