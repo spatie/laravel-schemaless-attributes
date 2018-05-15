@@ -23,6 +23,12 @@ class HasSchemalessAttributesTest extends TestCase
     }
 
     /** @test */
+    public function default_value_can_be_passed_when_getting_a_non_existing_schemaless_attribute()
+    {
+        $this->assertEquals('default', $this->testModel->schemaless_attributes->get('non_existing', 'default'));
+    }
+
+    /** @test */
     public function an_schemaless_attribute_can_be_set()
     {
         $this->testModel->schemaless_attributes->name = 'value';
