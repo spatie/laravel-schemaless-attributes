@@ -28,6 +28,9 @@ $yourModel->extra_attributes = [
 // retrieving values using dot notation
 $yourModel->extra_attributes->get('rey.side'); // returns 'light'
 
+// retrieve default value when attribute is not exists
+$yourModel->extra_attributes->get('non_existing', 'default'); // returns 'default'
+
 // it has a scope to retrieve all models with the given schemaless attributes
 $yourModel->withSchemalessAttributes(['name' => 'value', 'name2' => 'value2'])->get();
 ```
@@ -148,6 +151,12 @@ $yourModel->extra_attributes = [
 $yourModel->extra_attributes->set('rey.side', 'dark');
 
 $yourModel->extra_attributes->get('rey.side'); // Returns 'dark
+```
+
+You can also pass a default value to the `get` method.
+
+```php
+$yourModel->extra_attributes->get('non_existing', 'default'); // Returns 'default'
 ```
 
 ### Persisting schemaless attributes
