@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-schemaless-attributes` will be documented in this file
 
+## 1.1.2 - 2018-05-22
+
+- implement `Arrayable`
+
 ## 1.1.1 - 2018-05-22
 
 - add return to schemalessAttributes macro
