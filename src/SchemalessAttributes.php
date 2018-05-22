@@ -6,8 +6,9 @@ use Countable;
 use ArrayAccess;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Contracts\Support\Arrayable;
 
-class SchemalessAttributes implements ArrayAccess, Countable
+class SchemalessAttributes implements ArrayAccess, Countable, Arrayable
 {
     /** @var \Illuminate\Database\Eloquent\Model */
     protected $model;
@@ -94,6 +95,11 @@ class SchemalessAttributes implements ArrayAccess, Countable
     public function count()
     {
         return count($this->schemalessAttributes);
+    }
+
+    public function toArray(): array
+    {
+        return $this->all();
     }
 
     public static function scopeWithSchemalessAttributes(string $attributeName): Builder

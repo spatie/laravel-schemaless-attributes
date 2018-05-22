@@ -171,6 +171,17 @@ class HasSchemalessAttributesTest extends TestCase
     }
 
     /** @test */
+    public function it_can_be_used_as_an_arrayable()
+    {
+        $this->testModel->schemaless_attributes->name = 'value';
+
+        $this->assertEquals(
+            $this->testModel->schemaless_attributes->toArray(),
+            $this->testModel->schemaless_attributes->all()
+        );
+    }
+
+    /** @test */
     public function it_can_add_and_save_schemaless_attributes_in_one_go()
     {
         $array = [
