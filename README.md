@@ -183,39 +183,6 @@ If you only want to search on a single custom attribute, you can use the scope l
 $yourModel->withExtraAttributes('name', 'value')->get();
 ```
 
-### Easy accessing schemaless attributes
-
-This is the default way of setting / getting a schemaless attribute:
-
-```php
-// Let's set a value first
-$yourModel->extra_attributes->extra_property = 'value';
-
-// And then get it
-$yourModel->extra_attributes->extra_property; // returns 'value'
-```
-
-You can make the getting part a bit shorter by overriding the `__get` method on your model like this:
-
-```
-// In your model
-
-public function __get($key)
-{
-    if ($this->extra_attributes->has($key)) {
-        return $this->extra_attributes->get($key);
-    }
-
-    return parent::__get($key);
-}
-```
-
-With the `__get` method in place you can do this:
-
-```php
-$yourModel->extra_property; // returns 'value'
-```
-
 ## Testing
 
 First create a MySQL database named `laravel_extra_attributes`. After that you can run the tests with:
