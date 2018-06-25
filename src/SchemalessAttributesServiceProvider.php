@@ -10,7 +10,7 @@ class SchemalessAttributesServiceProvider extends ServiceProvider
     public function register()
     {
         Blueprint::macro('schemalessAttributes', function (string $columnName = 'schemaless_attributes') {
-            $this->json($columnName)->nullable();
+            return $this->json($columnName)->nullable();
         });
     }
 }
