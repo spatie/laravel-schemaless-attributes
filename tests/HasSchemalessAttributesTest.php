@@ -252,6 +252,22 @@ class HasSchemalessAttributesTest extends TestCase
         ], $this->testModel->schemaless_attributes->all());
     }
 
+    /** @test */
+    public function it_returns_an_array_that_can_be_looped()
+    {
+        $this->testModel->schemaless_attributes->name = 'value';
+        $this->testModel->schemaless_attributes->name2 = 'value2';
+
+        $attributes = $this->testModel->schemaless_attributes->all();
+
+        $this->assertCount(2, $attributes);
+
+        foreach($attributes as $key => $value) {
+            $this->assertNotNull($key);
+            $this->assertNotNull($value);
+        }
+    }
+
     protected function assertContainsModels(array $expectedModels, Collection $actualModels)
     {
         $assertionFailedMessage = 'Expected '.count($expectedModels).' models. Got '.$actualModels->count().' models';
