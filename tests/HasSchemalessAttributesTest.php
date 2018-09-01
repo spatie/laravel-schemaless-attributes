@@ -262,7 +262,7 @@ class HasSchemalessAttributesTest extends TestCase
 
         $this->assertCount(2, $attributes);
 
-        foreach($attributes as $key => $value) {
+        foreach ($attributes as $key => $value) {
             $this->assertNotNull($key);
             $this->assertNotNull($value);
         }
