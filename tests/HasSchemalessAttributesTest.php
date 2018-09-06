@@ -88,6 +88,32 @@ class HasSchemalessAttributesTest extends TestCase
     }
 
     /** @test */
+    public function it_can_get_values_using_wildcards_notation()
+    {
+        $this->testModel->schemaless_attributes->rey = ['sides' => [
+            ['name' => 'light'],
+            ['name' => 'neutral'],
+            ['name' => 'dark']
+        ]];
+
+        $this->assertEquals(['light', 'neutral', 'dark'], $this->testModel->schemaless_attributes->get('rey.sides.*.name'));
+    }
+
+    /** @test */
+    public function it_can_set_values_using_wildcard_notation()
+    {
+        $this->testModel->schemaless_attributes->rey = ['sides' => [
+            ['name' => 'light'],
+            ['name' => 'neutral'],
+            ['name' => 'dark']
+        ]];
+
+        $this->testModel->schemaless_attributes->set('rey.sides.*.name', 'dark');
+
+        $this->assertEquals(['dark', 'dark', 'dark'], $this->testModel->schemaless_attributes->get('rey.sides.*.name'));
+    }
+
+    /** @test */
     public function it_can_set_all_schemaless_attributes_at_once()
     {
         $array = [
