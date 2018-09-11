@@ -40,7 +40,7 @@ class SchemalessAttributes implements ArrayAccess, Countable, Arrayable
 
     public function get(string $name, $default = null)
     {
-        return array_get($this->schemalessAttributes, $name, $default);
+        return data_get($this->schemalessAttributes, $name, $default);
     }
 
     public function __set(string $name, $value)
@@ -50,7 +50,7 @@ class SchemalessAttributes implements ArrayAccess, Countable, Arrayable
 
     public function set(string $name, $value)
     {
-        array_set($this->schemalessAttributes, $name, $value);
+        data_set($this->schemalessAttributes, $name, $value);
 
         $this->model->{$this->sourceAttributeName} = $this->schemalessAttributes;
     }
