@@ -93,7 +93,7 @@ class HasSchemalessAttributesTest extends TestCase
         $this->testModel->schemaless_attributes->rey = ['sides' => [
             ['name' => 'light'],
             ['name' => 'neutral'],
-            ['name' => 'dark']
+            ['name' => 'dark'],
         ]];
 
         $this->assertEquals(['light', 'neutral', 'dark'], $this->testModel->schemaless_attributes->get('rey.sides.*.name'));
@@ -105,7 +105,7 @@ class HasSchemalessAttributesTest extends TestCase
         $this->testModel->schemaless_attributes->rey = ['sides' => [
             ['name' => 'light'],
             ['name' => 'neutral'],
-            ['name' => 'dark']
+            ['name' => 'dark'],
         ]];
 
         $this->testModel->schemaless_attributes->set('rey.sides.*.name', 'dark');
@@ -288,7 +288,7 @@ class HasSchemalessAttributesTest extends TestCase
 
         $this->assertCount(2, $attributes);
 
-        foreach($attributes as $key => $value) {
+        foreach ($attributes as $key => $value) {
             $this->assertNotNull($key);
             $this->assertNotNull($value);
         }
