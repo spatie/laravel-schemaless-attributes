@@ -2,17 +2,26 @@
 
 All notable changes to `laravel-schemaless-attributes` will be documented in this file
 
+## 1.2.0 - 2018-09-11
+
+- add support for wildcards 
+
 ## 1.1.3 - 2018-07-11
-- Removed unused `spatie/string` dependency
+
+- removed unused `spatie/string` dependency
 
 ## 1.1.2 - 2018-05-22
-- Added: Implement `Arrayable`
+
+- implement `Arrayable`
 
 ## 1.1.1 - 2018-05-22
-- Return to `schemalessAttributes` macro
+
+- return to `schemalessAttributes` macro
 
 ## 1.1.0 - 2018-05-15
-- Added: Support for setting default values
+
+- added support for setting default values
 
 ## 1.0.0 - 2018-05-11
-- Initial release
+
+- initial release
