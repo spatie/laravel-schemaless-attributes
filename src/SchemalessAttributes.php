@@ -48,11 +48,24 @@ class SchemalessAttributes implements ArrayAccess, Countable, Arrayable
         $this->set($name, $value);
     }
 
-    public function set(string $name, $value)
+    public function set($attribute, $value = null)
     {
-        data_set($this->schemalessAttributes, $name, $value);
+        if (is_iterable($attribute)) {
+            $this->setMany($attribute);
+
+            return;
+        }
+
+        data_set($this->schemalessAttributes, $attribute, $value);
 
         $this->model->{$this->sourceAttributeName} = $this->schemalessAttributes;
+    }
+
+    public function setMany(iterable $attributes = [])
+    {
+        array_map(function ($key, $item) {
+            $this->set($key, $item);
+        }, array_keys($attributes), $attributes);
     }
 
     public function has(string $name): bool

@@ -294,6 +294,40 @@ class HasSchemalessAttributesTest extends TestCase
         }
     }
 
+    /** @test */
+    public function it_can_setMany_attributes_at_once_by_passing_an_array_argument()
+    {
+        $this->testModel->schemaless_attributes->setMany([
+            'foo' => 'bar',
+            'baz' => 'buzz',
+            'arr' => [
+                'subKey1' => 'subVal1',
+                'subKey2' => 'subVal2',
+            ],
+        ]);
+
+        $this->assertEquals('bar', $this->testModel->schemaless_attributes->foo);
+        $this->assertCount(2, $this->testModel->schemaless_attributes->arr);
+        $this->assertEquals('subVal1', $this->testModel->schemaless_attributes->arr['subKey1']);
+    }
+
+    /** @test */
+    public function if_an_iterable_is_passed_to_set_it_will_defer_to_setMany()
+    {
+        $this->testModel->schemaless_attributes->set([
+            'foo' => 'bar',
+            'baz' => 'buzz',
+            'arr' => [
+                'subKey1' => 'subVal1',
+                'subKey2' => 'subVal2',
+            ],
+        ]);
+
+        $this->assertEquals('bar', $this->testModel->schemaless_attributes->foo);
+        $this->assertCount(2, $this->testModel->schemaless_attributes->arr);
+        $this->assertEquals('subVal1', $this->testModel->schemaless_attributes->arr['subKey1']);
+    }
+
     protected function assertContainsModels(array $expectedModels, Collection $actualModels)
     {
         $assertionFailedMessage = 'Expected '.count($expectedModels).' models. Got '.$actualModels->count().' models';
