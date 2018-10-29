@@ -51,7 +51,7 @@ class SchemalessAttributes implements ArrayAccess, Countable, Arrayable
     public function set($attribute, $value = null)
     {
         if (is_iterable($attribute)) {
-            foreach($attribute as $attribute => $value) {
+            foreach ($attribute as $attribute => $value) {
                 $this->set($attribute, $value);
             }
 
