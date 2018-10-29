@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-schemaless-attributes` will be documented in this file
 
+## 1.3.0 - 2018-10-29
+
+- add array support to `set`
+
 ## 1.2.0 - 2018-09-11
 
 - add support for wildcards 

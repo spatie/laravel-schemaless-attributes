@@ -295,9 +295,9 @@ class HasSchemalessAttributesTest extends TestCase
     }
 
     /** @test */
-    public function it_can_setMany_attributes_at_once_by_passing_an_array_argument()
+    public function it_can_multiple_attributes_at_once_by_passing_an_array_argument()
     {
-        $this->testModel->schemaless_attributes->setMany([
+        $this->testModel->schemaless_attributes->set([
             'foo' => 'bar',
             'baz' => 'buzz',
             'arr' => [
