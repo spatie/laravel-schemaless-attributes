@@ -25,10 +25,17 @@ $yourModel->extra_attributes = [
    'snoke' => ['side' => 'dark']
 ];
 
-// setting/updating multiple values in one go
+// setting/updating multiple values in one go via setMany()
 // (will not overwrite 'rey' set in previous example)
 $yourModel->extra_attributes->setMany([
-   'hahn' => ['side' => 'light'],
+   'han' => ['side' => 'light'],
+   'snoke' => ['side' => 'dark']
+]);
+
+// setting/updating multiple values in one go via set()
+// this will defer to setMany if an iterable passed
+$yourModel->extra_attributes->set([
+   'han' => ['side' => 'light'],
    'snoke' => ['side' => 'dark']
 ]);
 
