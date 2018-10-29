@@ -25,6 +25,13 @@ $yourModel->extra_attributes = [
    'snoke' => ['side' => 'dark']
 ];
 
+// setting/updating multiple values in one go
+// (will not overwrite 'rey' set in previous example)
+$yourModel->extra_attributes->setMany([
+   'hahn' => ['side' => 'light'],
+   'snoke' => ['side' => 'dark']
+]);
+
 // retrieving values using dot notation
 $yourModel->extra_attributes->get('rey.side'); // returns 'light'
 

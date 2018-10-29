@@ -55,6 +55,13 @@ class SchemalessAttributes implements ArrayAccess, Countable, Arrayable
         $this->model->{$this->sourceAttributeName} = $this->schemalessAttributes;
     }
 
+    public function setMany($attributes = [])
+    {
+        array_map(function ($key, $item) {
+            $this->set($key, $item);
+        }, array_keys($attributes), $attributes);
+    }
+
     public function has(string $name): bool
     {
         return array_has($this->schemalessAttributes, $name);
