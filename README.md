@@ -191,7 +191,7 @@ $yourModel->withExtraAttributes('name', 'value')->get();
 
 ## Testing
 
-First create a MySQL database named `laravel_extra_attributes`. After that you can run the tests with:
+First create a MySQL database named `laravel_schemaless_attributes`. After that you can run the tests with:
 
 ``` bash
 composer test
