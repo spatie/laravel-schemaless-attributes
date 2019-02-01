@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-schemaless-attributes` will be documented in this file
 
+## 1.3.1 - 2019-02-01
+
+- use Arr:: and Str:: functions
+
 ## 1.3.0 - 2018-10-29
 
 - add array support to `set`
