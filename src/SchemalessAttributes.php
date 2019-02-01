@@ -4,6 +4,7 @@ namespace Spatie\SchemalessAttributes;
 
 use Countable;
 use ArrayAccess;
+use Illuminate\Support\Arr;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Contracts\Support\Arrayable;
@@ -65,12 +66,12 @@ class SchemalessAttributes implements ArrayAccess, Countable, Arrayable
 
     public function has(string $name): bool
     {
-        return array_has($this->schemalessAttributes, $name);
+        return Arr::has($this->schemalessAttributes, $name);
     }
 
     public function forget(string $name): self
     {
-        $this->model->{$this->sourceAttributeName} = array_except($this->schemalessAttributes, $name);
+        $this->model->{$this->sourceAttributeName} = Arr::except($this->schemalessAttributes, $name);
 
         return $this;
     }
