@@ -179,7 +179,7 @@ Here's how you can use the provided scope.
 
 ```php
 // Returns all models that have all the given schemaless attributes
-$yourModel->withExtraAttributes(['name' => 'value', 'name2' => 'value2])->get();
+$yourModel->withExtraAttributes(['name' => 'value', 'name2' => 'value2'])->get();
 ```
 
 If you only want to search on a single custom attribute, you can use the scope like this
