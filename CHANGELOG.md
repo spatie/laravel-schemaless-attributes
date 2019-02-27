@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-schemaless-attributes` will be documented in this file
 
+## 1.4.0 - 2019-02-27
+
+- drop support for PHP 7.1
+
 ## 1.3.1 - 2019-02-01
 
 - use Arr:: and Str:: functions

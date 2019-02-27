@@ -9,7 +9,7 @@ class HasSchemalessAttributesTest extends TestCase
     /** @var \Spatie\SchemalessAttributes\Tests\TestModel */
     protected $testModel;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
