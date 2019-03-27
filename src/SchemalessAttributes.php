@@ -138,6 +138,6 @@ class SchemalessAttributes implements ArrayAccess, Countable, Arrayable
 
     protected function getRawSchemalessAttributes(): array
     {
-        return json_decode($this->model->getAttributes()[$this->sourceAttributeName] ?? '{}', true);
+        return is_array($decoded = json_decode($this->model->getAttributes()[$this->sourceAttributeName] ?? '{}', true)) ? $decoded : [];
     }
 }
