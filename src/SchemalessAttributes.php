@@ -140,7 +140,7 @@ class SchemalessAttributes implements ArrayAccess, Countable, Arrayable
     {
         $decoded = json_decode($this->model->getAttributes()[$this->sourceAttributeName] ?? '{}', true);
 
-        if(!is_array($decoded)) {
+        if (! is_array($decoded)) {
             return [];
         }
 
