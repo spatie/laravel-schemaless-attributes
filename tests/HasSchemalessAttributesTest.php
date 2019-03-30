@@ -328,6 +328,16 @@ class HasSchemalessAttributesTest extends TestCase
         $this->assertEquals('subVal1', $this->testModel->schemaless_attributes->arr['subKey1']);
     }
 
+    /** @test */
+    public function if_database_column_does_not_contain_json_decodable_string_it_returns_empty_array()
+    {
+        $model = TestModel::create(['schemaless_attributes' => 'null']);
+
+        $this->assertEquals('"null"', $model->getAttributes()['schemaless_attributes']);
+        $this->assertIsNotArray(json_decode($model->getAttributes()['schemaless_attributes'] ?? '{}', true));
+        $this->assertEquals([], $model->getSchemalessAttributesAttribute()->all());
+    }
+
     protected function assertContainsModels(array $expectedModels, Collection $actualModels)
     {
         $assertionFailedMessage = 'Expected '.count($expectedModels).' models. Got '.$actualModels->count().' models';
