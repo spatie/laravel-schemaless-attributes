@@ -6,7 +6,7 @@
 [![StyleCI](https://styleci.io/repos/132581720/shield?branch=master)](https://styleci.io/repos/132581720)
 [![Total Downloads](https://img.shields.io/packagist/dt/spatie/laravel-schemaless-attributes.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-schemaless-attributes)
 
-Wouldn't it be cool if you could have a bit of the spirit of NoSQL available in Eloquent? This package does just that. It provides a trait that when applied on a model, allows you to store arbritrary values in a single JSON column.
+Wouldn't it be cool if you could have a bit of the spirit of NoSQL available in Eloquent? This package does just that. It provides a trait that when applied on a model, allows you to store arbitrary values in a single JSON column.
 
 Here are a few examples. We're using the `extra_attributes` column here, but you can name it [whatever you want](#adding-the-column-where-the-schemaless-attributes-will-be-stored).
 
