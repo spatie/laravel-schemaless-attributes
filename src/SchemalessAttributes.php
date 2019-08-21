@@ -2,23 +2,18 @@
 
 namespace Spatie\SchemalessAttributes;
 
-use Countable;
-use ArrayAccess;
 use Illuminate\Support\Arr;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Support\Collection;
 
-class SchemalessAttributes implements ArrayAccess, Countable, Arrayable
+class SchemalessAttributes extends Collection
 {
     /** @var \Illuminate\Database\Eloquent\Model */
     protected $model;
 
     /** @var string */
     protected $sourceAttributeName;
-
-    /** @var array */
-    protected $schemalessAttributes = [];
 
     public static function createForModel(Model $model, string $sourceAttributeName): self
     {
@@ -31,84 +26,61 @@ class SchemalessAttributes implements ArrayAccess, Countable, Arrayable
 
         $this->sourceAttributeName = $sourceAttributeName;
 
-        $this->schemalessAttributes = $this->getRawSchemalessAttributes();
+        parent::__construct($this->getRawSchemalessAttributes());
     }
 
-    public function __get(string $name)
+    public function __get($name)
     {
         return $this->get($name);
     }
 
-    public function get(string $name, $default = null)
-    {
-        return data_get($this->schemalessAttributes, $name, $default);
-    }
-
     public function __set(string $name, $value)
     {
-        $this->set($name, $value);
+        $this->put($name, $value);
     }
 
-    public function set($attribute, $value = null)
+    public function set($key, $value = null)
     {
-        if (is_iterable($attribute)) {
-            foreach ($attribute as $attribute => $value) {
-                $this->set($attribute, $value);
-            }
-
-            return;
+        if(is_iterable($key)) {
+            return $this->merge($key);
         }
 
-        data_set($this->schemalessAttributes, $attribute, $value);
-
-        $this->model->{$this->sourceAttributeName} = $this->schemalessAttributes;
+        return $this->put($key, $value);
     }
 
-    public function has(string $name): bool
+    public function get($key, $default = null)
     {
-        return Arr::has($this->schemalessAttributes, $name);
+        return data_get($this->items, $key, $default);
     }
 
-    public function forget(string $name): self
+    public function put($key, $value)
     {
-        $this->model->{$this->sourceAttributeName} = Arr::except($this->schemalessAttributes, $name);
-
-        return $this;
+        return $this->override(parent::put($key, $value));
     }
 
-    public function all(): array
+    public function merge($items)
     {
-        return $this->getRawSchemalessAttributes();
+        return $this->override(array_merge($this->items, $this->getArrayableItems($items)));
     }
 
-    public function offsetExists($offset)
+    public function forget($keys)
     {
-        return $this->has($offset);
+        return $this->override(parent::forget($keys));
     }
 
-    public function offsetGet($offset)
+    public function offsetGet($key)
     {
-        return $this->$offset;
+        return $this->get($key);
     }
 
-    public function offsetSet($offset, $value)
+    public function offsetSet($key, $value)
     {
-        $this->{$offset} = $value;
+        return $this->override(data_set($this->items, $key, $value));
     }
 
     public function offsetUnset($offset)
     {
-        $this->forget($offset);
-    }
-
-    public function count()
-    {
-        return count($this->schemalessAttributes);
-    }
-
-    public function toArray(): array
-    {
-        return $this->all();
+        $this->override(Arr::except($this->items, $offset));
     }
 
     public static function scopeWithSchemalessAttributes(string $attributeName): Builder
@@ -138,6 +110,14 @@ class SchemalessAttributes implements ArrayAccess, Countable, Arrayable
 
     protected function getRawSchemalessAttributes(): array
     {
-        return json_decode($this->model->getAttributes()[$this->sourceAttributeName] ?? '{}', true);
+        return $this->model->fromJson($this->model->getAttributes()[$this->sourceAttributeName] ?? '{}');
+    }
+
+    protected function override(iterable $collection)
+    {
+        $this->items = $this->getArrayableItems($collection);
+        $this->model->{$this->sourceAttributeName} = $this->items;
+
+        return $this;
     }
 }
