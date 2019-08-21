@@ -328,6 +328,89 @@ class HasSchemalessAttributesTest extends TestCase
         $this->assertEquals('subVal1', $this->testModel->schemaless_attributes->arr['subKey1']);
     }
 
+    /** @test */
+    public function it_can_call_collection_method_pop()
+    {
+        $this->testModel->schemaless_attributes->set([
+            'foo' => 'bar',
+            'baz' => 'buzz',
+            'arr' => [
+                'subKey1' => 'subVal1',
+                'subKey2' => 'subVal2',
+            ],
+        ]);
+
+        $item = $this->testModel->schemaless_attributes->pop();
+
+        $this->assertEquals([
+            'subKey1' => 'subVal1',
+            'subKey2' => 'subVal2',
+        ], $item);
+        $this->assertEquals([
+            'foo' => 'bar',
+            'baz' => 'buzz',
+        ], $this->testModel->schemaless_attributes->toArray());
+    }
+
+    /** @test */
+    public function it_can_call_collection_method_sum()
+    {
+        $this->testModel->schemaless_attributes->set([
+            ['price' => 10],
+            ['price' => 5],
+        ]);
+
+        $this->assertEquals(15, $this->testModel->schemaless_attributes->sum('price'));
+        $this->assertEquals([
+            ['price' => 10],
+            ['price' => 5],
+        ], $this->testModel->schemaless_attributes->toArray());
+    }
+
+    /** @test */
+    public function it_can_call_collection_method_slice()
+    {
+        $this->testModel->schemaless_attributes->set([
+            'foo' => 'bar',
+            'baz' => 'buzz',
+            'lorem' => 'ipsum',
+            'dolor' => 'amet',
+        ]);
+
+        $this->assertEquals([
+            'baz' => 'buzz',
+            'lorem' => 'ipsum',
+        ], $this->testModel->schemaless_attributes->slice(1, 2)->toArray());
+        $this->assertEquals([
+            'foo' => 'bar',
+            'baz' => 'buzz',
+            'lorem' => 'ipsum',
+            'dolor' => 'amet',
+        ], $this->testModel->schemaless_attributes->toArray());
+    }
+
+    /** @test */
+    public function it_can_call_collection_method_only()
+    {
+        $this->testModel->schemaless_attributes->set([
+            'foo' => 'bar',
+            'baz' => 'buzz',
+            'lorem' => 'ipsum',
+            'dolor' => 'amet',
+        ]);
+
+        $this->assertEquals([
+            'baz' => 'buzz',
+            'dolor' => 'amet',
+        ], $this->testModel->schemaless_attributes->only('baz', 'dolor')->toArray());
+        $this->assertEquals([
+            'foo' => 'bar',
+            'baz' => 'buzz',
+            'lorem' => 'ipsum',
+            'dolor' => 'amet',
+        ], $this->testModel->schemaless_attributes->toArray());
+    }
+
     protected function assertContainsModels(array $expectedModels, Collection $actualModels)
     {
         $assertionFailedMessage = 'Expected '.count($expectedModels).' models. Got '.$actualModels->count().' models';

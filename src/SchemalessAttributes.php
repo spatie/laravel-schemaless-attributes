@@ -4,12 +4,19 @@ namespace Spatie\SchemalessAttributes;
 
 use Countable;
 use ArrayAccess;
+use JsonSerializable;
+use IteratorAggregate;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Contracts\Support\Arrayable;
 
-class SchemalessAttributes implements ArrayAccess, Countable, Arrayable
+/**
+ * @mixin Collection
+ */
+class SchemalessAttributes implements ArrayAccess, Arrayable, Countable, IteratorAggregate, Jsonable, JsonSerializable
 {
     /** @var \Illuminate\Database\Eloquent\Model */
     protected $model;
@@ -17,8 +24,8 @@ class SchemalessAttributes implements ArrayAccess, Countable, Arrayable
     /** @var string */
     protected $sourceAttributeName;
 
-    /** @var array */
-    protected $schemalessAttributes = [];
+    /** @var Collection */
+    protected $collection;
 
     public static function createForModel(Model $model, string $sourceAttributeName): self
     {
@@ -31,84 +38,76 @@ class SchemalessAttributes implements ArrayAccess, Countable, Arrayable
 
         $this->sourceAttributeName = $sourceAttributeName;
 
-        $this->schemalessAttributes = $this->getRawSchemalessAttributes();
+        $this->collection = new Collection($this->getRawSchemalessAttributes());
     }
 
-    public function __get(string $name)
+    public function __call($name, $arguments)
+    {
+        $result = call_user_func_array([$this->collection, $name], $arguments);
+
+        $this->override($this->collection->toArray());
+
+        return $result;
+    }
+
+    public function __get($name)
     {
         return $this->get($name);
     }
 
-    public function get(string $name, $default = null)
-    {
-        return data_get($this->schemalessAttributes, $name, $default);
-    }
-
-    public function __set(string $name, $value)
+    public function __set($name, $value)
     {
         $this->set($name, $value);
     }
 
-    public function set($attribute, $value = null)
+    /**
+     * @see Collection::get()
+     *
+     * @param $key
+     * @param null $default
+     *
+     * @return mixed
+     */
+    public function get($key, $default = null)
     {
-        if (is_iterable($attribute)) {
-            foreach ($attribute as $attribute => $value) {
-                $this->set($attribute, $value);
-            }
+        return data_get($this->collection, $key, $default);
+    }
 
-            return;
+    /**
+     * @see Collection::set()
+     *
+     * @param $key
+     * @param $value
+     *
+     * @return mixed
+     */
+    public function set($key, $value = null)
+    {
+        if (is_iterable($key)) {
+            return $this->override($this->collection->merge($key));
         }
 
-        data_set($this->schemalessAttributes, $attribute, $value);
+        $items = $this->collection->toArray();
 
-        $this->model->{$this->sourceAttributeName} = $this->schemalessAttributes;
+        return $this->override(data_set($items, $key, $value));
     }
 
-    public function has(string $name): bool
+    /**
+     * @see Collection::forget()
+     *
+     * @param $keys
+     *
+     * @return SchemalessAttributes
+     */
+    public function forget($keys)
     {
-        return Arr::has($this->schemalessAttributes, $name);
-    }
+        $items = $this->collection->toArray();
 
-    public function forget(string $name): self
-    {
-        $this->model->{$this->sourceAttributeName} = Arr::except($this->schemalessAttributes, $name);
+        foreach ((array) $keys as $key) {
+            Arr::forget($items, $key);
+        }
 
-        return $this;
-    }
-
-    public function all(): array
-    {
-        return $this->getRawSchemalessAttributes();
-    }
-
-    public function offsetExists($offset)
-    {
-        return $this->has($offset);
-    }
-
-    public function offsetGet($offset)
-    {
-        return $this->$offset;
-    }
-
-    public function offsetSet($offset, $value)
-    {
-        $this->{$offset} = $value;
-    }
-
-    public function offsetUnset($offset)
-    {
-        $this->forget($offset);
-    }
-
-    public function count()
-    {
-        return count($this->schemalessAttributes);
-    }
-
-    public function toArray(): array
-    {
-        return $this->all();
+        return $this->override($items);
     }
 
     public static function scopeWithSchemalessAttributes(string $attributeName): Builder
@@ -136,8 +135,61 @@ class SchemalessAttributes implements ArrayAccess, Countable, Arrayable
         return $builder;
     }
 
+    public function offsetGet($offset)
+    {
+        return $this->get($offset);
+    }
+
+    public function offsetExists($offset)
+    {
+        return $this->collection->offsetExists($offset);
+    }
+
+    public function offsetSet($offset, $value)
+    {
+        $this->set($offset, $value);
+    }
+
+    public function offsetUnset($offset)
+    {
+        $this->forget($offset);
+    }
+
+    public function toArray()
+    {
+        return $this->collection->toArray();
+    }
+
+    public function toJson($options = 0)
+    {
+        return $this->collection->toJson($options);
+    }
+
+    public function jsonSerialize()
+    {
+        return $this->collection->jsonSerialize();
+    }
+
+    public function count()
+    {
+        return $this->collection->count();
+    }
+
+    public function getIterator()
+    {
+        return $this->collection->getIterator();
+    }
+
     protected function getRawSchemalessAttributes(): array
     {
-        return json_decode($this->model->getAttributes()[$this->sourceAttributeName] ?? '{}', true);
+        return $this->model->fromJson($this->model->getAttributes()[$this->sourceAttributeName] ?? '{}');
+    }
+
+    protected function override(iterable $collection)
+    {
+        $this->collection = new Collection($collection);
+        $this->model->{$this->sourceAttributeName} = $this->collection->toArray();
+
+        return $this;
     }
 }
