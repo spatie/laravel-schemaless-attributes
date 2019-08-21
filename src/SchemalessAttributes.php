@@ -3,9 +3,9 @@
 namespace Spatie\SchemalessAttributes;
 
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Collection;
 
 class SchemalessAttributes extends Collection
 {
@@ -41,7 +41,7 @@ class SchemalessAttributes extends Collection
 
     public function set($key, $value = null)
     {
-        if(is_iterable($key)) {
+        if (is_iterable($key)) {
             return $this->merge($key);
         }
 
