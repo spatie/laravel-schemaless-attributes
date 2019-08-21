@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-schemaless-attributes` will be documented in this file
 
+## 1.5.0 - 2019-08-21
+
+- extend `Collection`
+
 ## 1.4.0 - 2019-02-27
 
 - drop support for PHP 7.1
