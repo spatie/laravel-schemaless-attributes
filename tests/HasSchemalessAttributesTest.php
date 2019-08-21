@@ -356,14 +356,14 @@ class HasSchemalessAttributesTest extends TestCase
     public function it_can_call_collection_method_sum()
     {
         $this->testModel->schemaless_attributes->set([
-            [ 'price' => 10 ],
-            [ 'price' => 5 ],
+            ['price' => 10],
+            ['price' => 5],
         ]);
 
         $this->assertEquals(15, $this->testModel->schemaless_attributes->sum('price'));
         $this->assertEquals([
-            [ 'price' => 10 ],
-            [ 'price' => 5 ],
+            ['price' => 10],
+            ['price' => 5],
         ], $this->testModel->schemaless_attributes->toArray());
     }
 

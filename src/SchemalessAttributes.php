@@ -2,16 +2,16 @@
 
 namespace Spatie\SchemalessAttributes;
 
-use ArrayAccess;
 use Countable;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Contracts\Support\Jsonable;
+use ArrayAccess;
+use JsonSerializable;
+use IteratorAggregate;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
-use IteratorAggregate;
-use JsonSerializable;
+use Illuminate\Contracts\Support\Jsonable;
+use Illuminate\Contracts\Support\Arrayable;
 
 /**
  * @mixin Collection
@@ -83,7 +83,7 @@ class SchemalessAttributes implements ArrayAccess, Arrayable, Countable, Iterato
      */
     public function set($key, $value = null)
     {
-        if(is_iterable($key)) {
+        if (is_iterable($key)) {
             return $this->override($this->collection->merge($key));
         }
 
