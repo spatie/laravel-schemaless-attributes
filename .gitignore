@@ -4,4 +4,3 @@ docs
 vendor
 coverage
 .env
-/.phpunit.result.cache
