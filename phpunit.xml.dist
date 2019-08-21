@@ -20,8 +20,8 @@
         </whitelist>
     </filter>
     <php>
-        <env name="DB_USERNAME" value="root"/>
-        <env name="DB_PASSWORD" value=""/>
+        <env name="DB_USERNAME" value="username"/>
+        <env name="DB_PASSWORD" value="password"/>
         <env name="DB_DATABASE" value="laravel_schemaless_attributes"/>
         <env name="DB_CONNECTION" value="mysql"/>
     </php>
