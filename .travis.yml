@@ -3,34 +3,50 @@ language: php
 services:
     - docker
 
-env:
-  global:
-    - COMPOSER_FLAGS=""
-  matrix:
-    - LARAVEL=5.6.*
-    - LARAVEL=5.7.*
-    - LARAVEL=5.8.*
-    - LARAVEL=^6.0
-    - COMPOSER_FLAGS="--prefer-lowest" LARAVEL=5.6.*
-    - COMPOSER_FLAGS="--prefer-lowest" LARAVEL=5.7.*
-    - COMPOSER_FLAGS="--prefer-lowest" LARAVEL=5.8.*
-    - COMPOSER_FLAGS="--prefer-lowest" LARAVEL=^6.0
-
 matrix:
     fast_finish: true
-
-php:
-    - 7.2
-    - 7.3
+    include:
+        - php: 7.2
+          env: LARAVEL='5.6.*' TESTBENCH='3.6.*' COMPOSER_FLAGS='--prefer-lowest'
+        - php: 7.2
+          env: LARAVEL='5.6.*' TESTBENCH='3.6.*' COMPOSER_FLAGS='--prefer-stable'
+        - php: 7.3
+          env: LARAVEL='5.6.*' TESTBENCH='3.6.*' COMPOSER_FLAGS='--prefer-lowest'
+        - php: 7.3
+          env: LARAVEL='5.6.*' TESTBENCH='3.6.*' COMPOSER_FLAGS='--prefer-stable'
+        - php: 7.2
+          env: LARAVEL='5.7.*' TESTBENCH='3.7.*' COMPOSER_FLAGS='--prefer-lowest'
+        - php: 7.2
+          env: LARAVEL='5.7.*' TESTBENCH='3.7.*' COMPOSER_FLAGS='--prefer-stable'
+        - php: 7.3
+          env: LARAVEL='5.7.*' TESTBENCH='3.7.*' COMPOSER_FLAGS='--prefer-lowest'
+        - php: 7.3
+          env: LARAVEL='5.7.*' TESTBENCH='3.7.*' COMPOSER_FLAGS='--prefer-stable'
+        - php: 7.2
+          env: LARAVEL='5.8.*' TESTBENCH='3.8.*' COMPOSER_FLAGS='--prefer-lowest'
+        - php: 7.2
+          env: LARAVEL='5.8.*' TESTBENCH='3.8.*' COMPOSER_FLAGS='--prefer-stable'
+        - php: 7.3
+          env: LARAVEL='5.8.*' TESTBENCH='3.8.*' COMPOSER_FLAGS='--prefer-lowest'
+        - php: 7.3
+          env: LARAVEL='5.8.*' TESTBENCH='3.8.*' COMPOSER_FLAGS='--prefer-stable'
+        - php: 7.2
+          env: LARAVEL='6.*' TESTBENCH='4.*' COMPOSER_FLAGS='--prefer-lowest'
+        - php: 7.2
+          env: LARAVEL='6.*' TESTBENCH='4.*' COMPOSER_FLAGS='--prefer-stable'
+        - php: 7.3
+          env: LARAVEL='6.*' TESTBENCH='4.*' COMPOSER_FLAGS='--prefer-lowest'
+        - php: 7.3
+          env: LARAVEL='6.*' TESTBENCH='4.*' COMPOSER_FLAGS='--prefer-stable'
 
 sudo: false
 
 before_install:
     - travis_retry composer self-update
-    - travis_retry composer require "illuminate/support=${LARAVEL}" --no-interaction --no-suggest
+    - travis_retry composer require --no-update --no-interaction "illuminate/support:${LARAVEL}" "orchestra/testbench:${TESTBENCH}"
 
 install:
-    - travis_retry composer update "${COMPOSER_FLAGS} --no-interaction --no-suggest
+    - travis_retry composer update ${COMPOSER_FLAGS} --prefer-dist --no-interaction --no-suggest
 
 before_script:
     - sudo service mysql stop
