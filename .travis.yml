@@ -5,8 +5,12 @@ services:
 
 env:
   matrix:
-    - COMPOSER_FLAGS="--prefer-lowest"
-    - COMPOSER_FLAGS=""
+    - LARAVEL=5.7.*
+    - LARAVEL=5.8.*
+    - LARAVEL=^6.0
+
+matrix:
+    fast_finish: true
 
 php:
     - 7.2
@@ -15,11 +19,9 @@ php:
 sudo: false
 
 install:
-    - travis_retry composer install
+    - travis_retry composer require "illuminate/support=${LARAVEL}" --dev --prefer-dist --no-interaction --no-suggest
 
 before_script:
-    - travis_retry composer self-update
-    - travis_retry composer update ${COMPOSER_FLAGS} --no-interaction --prefer-dist
     - sudo service mysql stop
     - docker-compose -f ./tests/docker-compose.yml up -d
     - php tests/wait.php
