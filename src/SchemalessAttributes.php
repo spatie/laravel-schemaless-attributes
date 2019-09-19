@@ -180,7 +180,7 @@ class SchemalessAttributes implements ArrayAccess, Arrayable, Countable, Iterato
         return $this->collection->getIterator();
     }
 
-    protected function getRawSchemalessAttributes(): array
+    protected function getRawSchemalessAttributes()
     {
         return $this->model->fromJson($this->model->getAttributes()[$this->sourceAttributeName] ?? '{}');
     }
