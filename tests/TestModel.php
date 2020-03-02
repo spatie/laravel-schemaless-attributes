@@ -2,8 +2,8 @@
 
 namespace Spatie\SchemalessAttributes\Tests;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Spatie\SchemalessAttributes\SchemalessAttributes;
 
 class TestModel extends Model

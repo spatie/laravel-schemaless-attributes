@@ -2,8 +2,8 @@
 
 namespace Spatie\SchemalessAttributes;
 
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\ServiceProvider;
 
 class SchemalessAttributesServiceProvider extends ServiceProvider
 {
