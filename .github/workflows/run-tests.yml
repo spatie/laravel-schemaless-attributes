@@ -10,7 +10,7 @@ jobs:
             matrix:
                 os: [ubuntu-latest, windows-latest]
                 php: [7.4]
-                laravel: [5.8.*, 6.*, 7.*]
+                laravel: [5.6.*, 5.7.*, 5.8.*, 6.*, 7.*]
                 dependency-version: [prefer-lowest, prefer-stable]
                 include:
                     -   laravel: 7.*
@@ -19,8 +19,22 @@ jobs:
                         testbench: 4.*
                     -   laravel: 5.8.*
                         testbench: 3.8.*
+                    -   laravel: 5.7.*
+                        testbench: 3.7.*
+                    -   laravel: 5.6.*
+                        testbench: 3.6.*
 
         name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.dependency-version }} - ${{ matrix.os }}
+
+        services:
+            mysql:
+                image: mysql:5.7
+                env:
+                    MYSQL_ALLOW_EMPTY_PASSWORD: yes
+                    MYSQL_DATABASE: laravel_tags
+                ports:
+                    - 3306
+                options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
         steps:
             -   name: Checkout code
@@ -46,3 +60,5 @@ jobs:
 
             -   name: Execute tests
                 run: vendor/bin/phpunit
+                env:
+                    DB_PORT: ${{ job.services.mysql.ports[3306] }}
