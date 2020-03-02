@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-schemaless-attributes` will be documented in this file
 
+## 1.7.0 - 2020-03-02
+
+- Add Laravel 7 support
+
 ## 1.6.0 - 2019-09-04
 
 - Add Laravel 6 support
