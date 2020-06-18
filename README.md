@@ -41,19 +41,15 @@ $yourModel->extra_attributes->get('non_existing', 'default'); // returns 'defaul
 $yourModel->withSchemalessAttributes(['name' => 'value', 'name2' => 'value2'])->get();
 ```
 
-## Support us
-
-Learn how to create a package like this one, by watching our premium video course:
-
-[![Laravel Package training](https://spatie.be/github/package-training.jpg)](https://laravelpackage.training)
-
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
-
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
-
 ## Requirements
 
 This package requires a database with support for `json` columns like MySQL 5.7 or higher.
+
+## Support us
+
+We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us). 
+
+We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
 
 ## Installation
 
@@ -105,6 +101,43 @@ class TestModel extends Model
     // ...
 }
 ```
+
+Or you can use `SchemalessAttributesTrait` trait with `$schemalessAttributes` property, and add only scope on your model. Here's an example of what you need to add if you've chosen `extra_attributes, other_extra_attributes` as your column name.
+
+```php
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use Spatie\SchemalessAttributes\SchemalessAttributes;
+use Spatie\SchemalessAttributes\SchemalessAttributesTrait;
+
+class TestModel extends Model
+{
+    use SchemalessAttributesTrait;
+
+    // ...
+    
+    /**
+     * @var array
+     */
+    protected $schemalessAttributes = [
+        'extra_attributes',
+        'other_extra_attributes',
+    ];
+
+    public function scopeWithExtraAttributes(): Builder
+    {
+        return SchemalessAttributes::scopeWithSchemalessAttributes('extra_attributes');
+    }
+    
+    public function scopeWithOtherExtraAttributes(): Builder
+    {
+        return SchemalessAttributes::scopeWithSchemalessAttributes('other_extra_attributes');
+    }
+
+    // ...
+}
+```
+
 
 If you want to reuse this behaviour across multiple models you could opt to put the function in a trait of your own. Here's what that trait could look like:
 
