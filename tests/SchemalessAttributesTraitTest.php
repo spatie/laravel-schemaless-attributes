@@ -16,9 +16,15 @@ class SchemalessAttributesTraitTest extends TestCase
     }
 
     /** @test */
-    public function cast_as_array_initialize_schemaless_attributes_trait()
+    public function schemaless_attributes_cast_as_array_initialize_schemaless_attributes_trait()
     {
-        $this->assertEquals(['schemaless_attributes' => 'array', 'other_schemaless_attributes' => 'array'], $this->testModel->getCasts());
+        $this->assertTrue($this->testModel->hasCast('schemaless_attributes', 'array'));
+    }
+
+    /** @test */
+    public function other_schemaless_attributes_cast_as_array_initialize_schemaless_attributes_trait()
+    {
+        $this->assertTrue($this->testModel->hasCast('other_schemaless_attributes', 'array'));
     }
 
     /** @test */
