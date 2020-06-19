@@ -29,7 +29,7 @@ trait SchemalessAttributesTrait
     /**
      * @return array
      */
-    protected function getSchemalessAttributes()
+    public function getSchemalessAttributes()
     {
         return $this->schemalessAttributes ?? [];
     }
