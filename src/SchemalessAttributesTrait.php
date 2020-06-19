@@ -20,7 +20,7 @@ trait SchemalessAttributesTrait
         $casts = [];
 
         foreach ($this->getSchemalessAttributes() as $attribute) {
-            $casts[$attribute] = 'array';
+            $this->casts[$attribute] = 'array';
         }
 
         $this->mergeCasts($casts);
