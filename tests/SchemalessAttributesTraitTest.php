@@ -15,9 +15,7 @@ class SchemalessAttributesTraitTest extends TestCase
         $this->testModel = new TestModelUsedTrait();
     }
 
-    /**
-     *
-     */
+    /** @test */
     public function cast_as_array_initialize_schemaless_attributes_trait()
     {
         $this->assertEquals(['schemaless_attributes' => 'array', 'other_schemaless_attributes' => 'array'], $this->testModel->getCasts());

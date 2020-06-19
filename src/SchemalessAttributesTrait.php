@@ -13,7 +13,7 @@ use Illuminate\Support\Collection;
 trait SchemalessAttributesTrait
 {
     /**
-     * Register schemalessAttributes attributes as array(cast)
+     * Register schemalessAttributes attributes as array(cast).
      */
     public function initializeSchemalessAttributesTrait()
     {

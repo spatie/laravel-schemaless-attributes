@@ -13,6 +13,6 @@ class TestModelUsedTrait extends Model
 
     public $schemalessAttributes = [
         'schemaless_attributes',
-        'other_schemaless_attributes'
+        'other_schemaless_attributes',
     ];
 }
