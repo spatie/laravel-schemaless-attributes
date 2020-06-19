@@ -17,13 +17,9 @@ trait SchemalessAttributesTrait
      */
     public function initializeSchemalessAttributesTrait()
     {
-        $casts = [];
-
         foreach ($this->getSchemalessAttributes() as $attribute) {
             $this->casts[$attribute] = 'array';
         }
-
-        $this->mergeCasts($casts);
     }
 
     /**
