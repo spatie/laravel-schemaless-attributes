@@ -2,7 +2,6 @@
 
 namespace Spatie\SchemalessAttributes;
 
-
 use Illuminate\Support\Collection;
 
 /**
