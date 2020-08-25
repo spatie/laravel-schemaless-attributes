@@ -106,7 +106,7 @@ class TestModel extends Model
 }
 ```
 
-Or you can use `SchemalessAttributesTrait` trait with `$schemalessAttributes` property, and add only scope on your model. Here's an example of what you need to add if you've chosen `extra_attributes, other_extra_attributes` as your column name.
+Alternatively, you can use `SchemalessAttributesTrait` trait with `$schemalessAttributes` property, and add only scope on your model. Here's an example of what you need to add if you've chosen `extra_attributes, other_extra_attributes` as your column name.
 
 ```php
 use Illuminate\Database\Eloquent\Model;
