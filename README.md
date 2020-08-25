@@ -106,6 +106,43 @@ class TestModel extends Model
 }
 ```
 
+Or you can use `SchemalessAttributesTrait` trait with `$schemalessAttributes` property, and add only scope on your model. Here's an example of what you need to add if you've chosen `extra_attributes, other_extra_attributes` as your column name.
+
+```php
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use Spatie\SchemalessAttributes\SchemalessAttributes;
+use Spatie\SchemalessAttributes\SchemalessAttributesTrait;
+
+class TestModel extends Model
+{
+    use SchemalessAttributesTrait;
+
+    // ...
+    
+    /**
+     * @var array
+     */
+    protected $schemalessAttributes = [
+        'extra_attributes',
+        'other_extra_attributes',
+    ];
+
+    public function scopeWithExtraAttributes(): Builder
+    {
+        return SchemalessAttributes::scopeWithSchemalessAttributes('extra_attributes');
+    }
+    
+    public function scopeWithOtherExtraAttributes(): Builder
+    {
+        return SchemalessAttributes::scopeWithSchemalessAttributes('other_extra_attributes');
+    }
+
+    // ...
+}
+```
+
+
 If you want to reuse this behaviour across multiple models you could opt to put the function in a trait of your own. Here's what that trait could look like:
 
 ```php
