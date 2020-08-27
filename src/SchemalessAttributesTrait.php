@@ -12,7 +12,7 @@ use Illuminate\Support\Collection;
 trait SchemalessAttributesTrait
 {
     /**
-     * Register schemalessAttributes attributes as array(cast).
+     *
      */
     public function initializeSchemalessAttributesTrait()
     {
@@ -26,7 +26,7 @@ trait SchemalessAttributesTrait
      */
     public function getSchemalessAttributes()
     {
-        return $this->schemalessAttributes ?? [];
+        return $this->schemalessAttributes ? $this->schemalessAttributes : [];
     }
 
     /**
