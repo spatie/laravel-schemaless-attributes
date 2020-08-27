@@ -2,6 +2,8 @@
 
 namespace Spatie\SchemalessAttributes\Tests;
 
+use Illuminate\Support\Str;
+
 class SchemalessAttributesTraitTest extends TestCase
 {
     /** @var \Spatie\SchemalessAttributes\Tests\TestModelUsedTrait */
@@ -17,13 +19,21 @@ class SchemalessAttributesTraitTest extends TestCase
     /** @test */
     public function schemaless_attributes_cast_as_array_initialize_schemaless_attributes_trait()
     {
-        $this->assertTrue($this->testModel->hasCast('schemaless_attributes', 'array'));
+        if (Str::startsWith(app()->version(), '5.6')) {
+            $this->assertFalse($this->testModel->hasCast('schemaless_attributes', 'array'));
+        } else {
+            $this->assertTrue($this->testModel->hasCast('schemaless_attributes', 'array'));
+        }
     }
 
     /** @test */
     public function other_schemaless_attributes_cast_as_array_initialize_schemaless_attributes_trait()
     {
-        $this->assertTrue($this->testModel->hasCast('other_schemaless_attributes', 'array'));
+        if (Str::startsWith(app()->version(), '5.6')) {
+            $this->assertFalse($this->testModel->hasCast('other_schemaless_attributes', 'array'));
+        } else {
+            $this->assertTrue($this->testModel->hasCast('other_schemaless_attributes', 'array'));
+        }
     }
 
     /** @test */
