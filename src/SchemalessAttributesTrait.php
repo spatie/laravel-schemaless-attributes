@@ -3,6 +3,7 @@
 namespace Spatie\SchemalessAttributes;
 
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 /**
  * @property array $schemalessAttributes
@@ -11,6 +12,27 @@ use Illuminate\Support\Collection;
  */
 trait SchemalessAttributesTrait
 {
+    /**
+     * @var
+     */
+    private $initializeSchemalessAttributesTrait;
+
+    /**
+     * Get the casts array.
+     *
+     * @return array
+     */
+    public function getCasts()
+    {
+        if (Str::startsWith(app()->version(), '5.6')) {
+            if (! $this->initializeSchemalessAttributesTrait) {
+                $this->initializeSchemalessAttributesTrait();
+                $this->initializeSchemalessAttributesTrait = true;
+            }
+        }
+        return parent::getCasts();
+    }
+
     public function initializeSchemalessAttributesTrait()
     {
         foreach ($this->getSchemalessAttributes() as $attribute) {
@@ -23,7 +45,7 @@ trait SchemalessAttributesTrait
      */
     public function getSchemalessAttributes()
     {
-        return $this->schemalessAttributes ? $this->schemalessAttributes : [];
+        return isset($this->schemalessAttributes) ? $this->schemalessAttributes : [];
     }
 
     /**
