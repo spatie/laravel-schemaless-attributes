@@ -3,7 +3,6 @@
 namespace Spatie\SchemalessAttributes;
 
 use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
 
 /**
  * @property array $schemalessAttributes
