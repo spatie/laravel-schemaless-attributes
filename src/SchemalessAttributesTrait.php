@@ -30,6 +30,7 @@ trait SchemalessAttributesTrait
                 $this->initializeSchemalessAttributesTrait = true;
             }
         }
+
         return parent::getCasts();
     }
 
