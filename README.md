@@ -77,7 +77,7 @@ Schema::table('your_models', function (Blueprint $table) {
 
 ### Preparing the model
 
-In order to work with the schemaless attributes you'll need to add a cast, an accessor and a scope on your model. Here's an example of what you need to add if you've chosen `extra_attributes` as your column name.
+In order to work with the schemaless attributes you'll need to add a cast, an accessor and a scopes on your model. Here's an example of what you need to add if you've chosen `extra_attributes` as your column name.
 
 ```php
 use Illuminate\Database\Eloquent\Model;
