@@ -11,9 +11,6 @@ use Illuminate\Support\Collection;
  */
 trait SchemalessAttributesTrait
 {
-    /**
-     *
-     */
     public function initializeSchemalessAttributesTrait()
     {
         foreach ($this->getSchemalessAttributes() as $attribute) {
