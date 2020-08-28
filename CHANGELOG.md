@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-schemaless-attributes` will be documented in this file
 
+## 1.8.0 - 2020-08-26
+
+- add trait with multi-column support with tests (#65)
+
 ## 1.7.1 - 2020-03-18
 
 - fix `getRawSchemalessAttributes()` must be of the type array (#60)
