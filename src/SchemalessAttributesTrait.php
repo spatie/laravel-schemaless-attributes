@@ -18,10 +18,7 @@ trait SchemalessAttributesTrait
         }
     }
 
-    /**
-     * @return array
-     */
-    public function getSchemalessAttributes()
+    public function getSchemalessAttributes(): array
     {
         return isset($this->schemalessAttributes) ? $this->schemalessAttributes : [];
     }
