@@ -77,7 +77,7 @@ Schema::table('your_models', function (Blueprint $table) {
 
 ### Preparing the model
 
-In order to work with the schemaless attributes you'll need to add a cast, an accessor and a scope on your model. Here's an example of what you need to add if you've chosen `extra_attributes` as your column name.
+In order to work with the schemaless attributes you'll need to add a cast, an accessor and a scopes on your model. Here's an example of what you need to add if you've chosen `extra_attributes` as your column name.
 
 ```php
 use Illuminate\Database\Eloquent\Model;
@@ -105,6 +105,43 @@ class TestModel extends Model
     // ...
 }
 ```
+
+If you need support for multiple schemaless columns on a single model, you should use `SchemalessAttributesTrait` trait. Here's an example of what you need to add if you've chosen `extra_attributes, other_extra_attributes` as your column names.
+
+```php
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use Spatie\SchemalessAttributes\SchemalessAttributes;
+use Spatie\SchemalessAttributes\SchemalessAttributesTrait;
+
+class TestModel extends Model
+{
+    use SchemalessAttributesTrait;
+
+    // ...
+    
+    /**
+     * @var array
+     */
+    protected $schemalessAttributes = [
+        'extra_attributes',
+        'other_extra_attributes',
+    ];
+
+    public function scopeWithExtraAttributes(): Builder
+    {
+        return SchemalessAttributes::scopeWithSchemalessAttributes('extra_attributes');
+    }
+    
+    public function scopeWithOtherExtraAttributes(): Builder
+    {
+        return SchemalessAttributes::scopeWithSchemalessAttributes('other_extra_attributes');
+    }
+
+    // ...
+}
+```
+
 
 If you want to reuse this behaviour across multiple models you could opt to put the function in a trait of your own. Here's what that trait could look like:
 
