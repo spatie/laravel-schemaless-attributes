@@ -25,6 +25,7 @@ trait SchemalessAttributesTrait
 
     /**
      * @param $key
+     *
      * @return mixed|SchemalessAttributes
      */
     public function __get($key)
