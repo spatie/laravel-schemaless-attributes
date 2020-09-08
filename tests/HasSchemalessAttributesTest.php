@@ -117,7 +117,7 @@ class HasSchemalessAttributesTest extends TestCase
     public function it_can_set_all_schemaless_attributes_at_once()
     {
         $array = [
-            'rey'   => ['side' => 'light'],
+            'rey' => ['side' => 'light'],
             'snoke' => ['side' => 'dark'],
         ];
 
@@ -211,7 +211,7 @@ class HasSchemalessAttributesTest extends TestCase
     public function it_can_add_and_save_schemaless_attributes_in_one_go()
     {
         $array = [
-            'name'  => 'value',
+            'name' => 'value',
             'name2' => 'value2',
         ];
 
@@ -226,17 +226,17 @@ class HasSchemalessAttributesTest extends TestCase
         TestModel::truncate();
 
         $model1 = TestModel::create(['schemaless_attributes' => [
-            'name'  => 'value',
+            'name' => 'value',
             'name2' => 'value2',
         ]]);
 
         $model2 = TestModel::create(['schemaless_attributes' => [
-            'name'  => 'value',
+            'name' => 'value',
             'name2' => 'value2',
         ]]);
 
         $model3 = TestModel::create(['schemaless_attributes' => [
-            'name'  => 'value',
+            'name' => 'value',
             'name2' => 'value3',
         ]]);
 
@@ -273,7 +273,7 @@ class HasSchemalessAttributesTest extends TestCase
         $this->testModel->schemaless_attributes->name2 = 'value2';
 
         $this->assertEquals([
-            'name'  => 'value',
+            'name' => 'value',
             'name2' => 'value2',
         ], $this->testModel->schemaless_attributes->all());
     }
@@ -371,19 +371,19 @@ class HasSchemalessAttributesTest extends TestCase
     public function it_can_call_collection_method_slice()
     {
         $this->testModel->schemaless_attributes->set([
-            'foo'   => 'bar',
-            'baz'   => 'buzz',
+            'foo' => 'bar',
+            'baz' => 'buzz',
             'lorem' => 'ipsum',
             'dolor' => 'amet',
         ]);
 
         $this->assertEquals([
-            'baz'   => 'buzz',
+            'baz' => 'buzz',
             'lorem' => 'ipsum',
         ], $this->testModel->schemaless_attributes->slice(1, 2)->toArray());
         $this->assertEquals([
-            'foo'   => 'bar',
-            'baz'   => 'buzz',
+            'foo' => 'bar',
+            'baz' => 'buzz',
             'lorem' => 'ipsum',
             'dolor' => 'amet',
         ], $this->testModel->schemaless_attributes->toArray());
@@ -393,19 +393,19 @@ class HasSchemalessAttributesTest extends TestCase
     public function it_can_call_collection_method_only()
     {
         $this->testModel->schemaless_attributes->set([
-            'foo'   => 'bar',
-            'baz'   => 'buzz',
+            'foo' => 'bar',
+            'baz' => 'buzz',
             'lorem' => 'ipsum',
             'dolor' => 'amet',
         ]);
 
         $this->assertEquals([
-            'baz'   => 'buzz',
+            'baz' => 'buzz',
             'dolor' => 'amet',
         ], $this->testModel->schemaless_attributes->only('baz', 'dolor')->toArray());
         $this->assertEquals([
-            'foo'   => 'bar',
-            'baz'   => 'buzz',
+            'foo' => 'bar',
+            'baz' => 'buzz',
             'lorem' => 'ipsum',
             'dolor' => 'amet',
         ], $this->testModel->schemaless_attributes->toArray());
