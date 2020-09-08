@@ -2,8 +2,6 @@
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/laravel-schemaless-attributes.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-schemaless-attributes)
 ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/spatie/laravel-schemaless-attributes/run-tests?label=tests)
-[![Quality Score](https://img.shields.io/scrutinizer/g/spatie/laravel-schemaless-attributes.svg?style=flat-square)](https://scrutinizer-ci.com/g/spatie/laravel-schemaless-attributes)
-[![StyleCI](https://styleci.io/repos/132581720/shield?branch=master)](https://styleci.io/repos/132581720)
 [![Total Downloads](https://img.shields.io/packagist/dt/spatie/laravel-schemaless-attributes.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-schemaless-attributes)
 
 Wouldn't it be cool if you could have a bit of the spirit of NoSQL available in Eloquent? This package does just that. It provides a trait that when applied on a model, allows you to store arbitrary values in a single JSON column.
