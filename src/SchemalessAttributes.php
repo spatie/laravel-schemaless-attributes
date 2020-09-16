@@ -60,6 +60,20 @@ class SchemalessAttributes implements ArrayAccess, Arrayable, Countable, Iterato
         $this->set($name, $value);
     }
 
+    public function __isset($name)
+    {
+        $property = $this->get($name);
+
+        return isset($property);
+    }
+
+    public function __empty($name)
+    {
+        $property = $this->get($name);
+
+        return empty($property);
+    }
+
     /**
      * @see Collection::get()
      *

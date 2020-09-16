@@ -57,6 +57,24 @@ class HasSchemalessAttributesTest extends TestCase
     }
 
     /** @test */
+    public function checking_existing_schemaless_attribute_is_empty_with_direct_access()
+    {
+        $this->testModel->schemaless_attributes->name = 'value';
+        $this->testModel->save();
+
+        $this->assertFalse(empty($this->testModel->schemaless_attributes->name));
+    }
+
+    /** @test */
+    public function checking_existing_schemaless_attribute_is_empty_with_access_via_get()
+    {
+        $this->testModel->schemaless_attributes->name = 'value';
+        $this->testModel->save();
+
+        $this->assertFalse(empty($this->testModel->schemaless_attributes->get('name')));
+    }
+
+    /** @test */
     public function it_can_handle_an_array()
     {
         $array = [
