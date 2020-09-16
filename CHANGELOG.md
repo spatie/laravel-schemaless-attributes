@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-schemaless-attributes` will be documented in this file
 
+## 1.8.2 - 2020-09-14
+
+- improve behaviour for isset() and empty()
+
 ## 1.8.1 - 2020-08-09
 
 - support Laravel 8
