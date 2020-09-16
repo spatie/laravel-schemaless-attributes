@@ -63,6 +63,7 @@ class HasSchemalessAttributesTest extends TestCase
         $this->testModel->save();
 
         $this->assertFalse(empty($this->testModel->schemaless_attributes->name));
+        $this->assertTrue(empty($this->testModel->schemaless_attributes->first_name));
     }
 
     /** @test */
@@ -72,6 +73,7 @@ class HasSchemalessAttributesTest extends TestCase
         $this->testModel->save();
 
         $this->assertFalse(empty($this->testModel->schemaless_attributes->get('name')));
+        $this->assertTrue(empty($this->testModel->schemaless_attributes->get('first_name')));
     }
 
     /** @test */
