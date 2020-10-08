@@ -37,6 +37,9 @@ $yourModel->extra_attributes->get('non_existing', 'default'); // returns 'defaul
 
 // it has a scope to retrieve all models with the given schemaless attributes
 $yourModel->withSchemalessAttributes(['name' => 'value', 'name2' => 'value2'])->get();
+
+// delete key & value
+$yourModel->extra_attributes->forget('key');
 ```
 
 ## Support us
