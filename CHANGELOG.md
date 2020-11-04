@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-schemaless-attributes` will be documented in this file
 
+## 1.8.3 - 2020-11-04
+
+- allow PHP 8.0
+
 ## 1.8.2 - 2020-09-14
 
 - improve behaviour for isset() and empty()
