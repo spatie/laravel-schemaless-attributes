@@ -62,8 +62,8 @@ class HasSchemalessAttributesTest extends TestCase
         $this->testModel->schemaless_attributes->name = 'value';
         $this->testModel->save();
 
-        $this->assertFalse(empty($this->testModel->schemaless_attributes->name));
-        $this->assertTrue(empty($this->testModel->schemaless_attributes->first_name));
+        $this->assertNotEmpty($this->testModel->schemaless_attributes->name);
+        $this->assertEmpty($this->testModel->schemaless_attributes->first_name);
     }
 
     /** @test */
@@ -72,8 +72,8 @@ class HasSchemalessAttributesTest extends TestCase
         $this->testModel->schemaless_attributes->name = 'value';
         $this->testModel->save();
 
-        $this->assertFalse(empty($this->testModel->schemaless_attributes->get('name')));
-        $this->assertTrue(empty($this->testModel->schemaless_attributes->get('first_name')));
+        $this->assertNotEmpty($this->testModel->schemaless_attributes->get('name'));
+        $this->assertEmpty($this->testModel->schemaless_attributes->get('first_name'));
     }
 
     /** @test */
@@ -186,7 +186,7 @@ class HasSchemalessAttributesTest extends TestCase
 
         $this->testModel->refresh();
 
-        $this->assertSame(true, $this->testModel->schemaless_attributes->bool);
+        $this->assertTrue($this->testModel->schemaless_attributes->bool);
         $this->assertSame(12.34, $this->testModel->schemaless_attributes->float);
     }
 
