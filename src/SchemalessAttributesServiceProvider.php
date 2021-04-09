@@ -3,8 +3,8 @@
 namespace Spatie\SchemalessAttributes;
 
 use Illuminate\Database\Schema\Blueprint;
-use Spatie\LaravelPackageTools\PackageServiceProvider;
 use Spatie\LaravelPackageTools\Package;
+use Spatie\LaravelPackageTools\PackageServiceProvider;
 
 class SchemalessAttributesServiceProvider extends PackageServiceProvider
 {

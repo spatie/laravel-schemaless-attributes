@@ -21,7 +21,6 @@ trait SchemalessAttributesTrait
 
     public function getSchemalessAttributes(): array
     {
-
         return isset($this->schemalessAttributes)
             ? $this->schemalessAttributes
             : [];

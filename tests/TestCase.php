@@ -24,7 +24,7 @@ abstract class TestCase extends Orchestra
     }
 
     /*
-     * uses different table names for each test class to support 
+     * uses different table names for each test class to support
      * running tests in parallel.
      */
     protected function setUpDatabase()
