@@ -29,6 +29,13 @@ abstract class TestCase extends Orchestra
      */
     protected function setUpDatabase()
     {
+        Schema::dropIfExists("test_models");
+
+        Schema::create("test_models", function (Blueprint $table) {
+            $table->increments('id');
+            $table->schemalessAttributes();
+        });
+        
         $parts = explode('\\', static::class);
         $class = array_pop($parts);
         
