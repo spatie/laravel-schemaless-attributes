@@ -56,7 +56,7 @@ This package requires a database with support for `json` columns like MySQL 5.7 
 
 ## Installation
 
-> For Laravel 6 or PHP 7, use version 1.x of this package.
+> For Laravel versions 6 & 7 or PHP 7, use version 1.x of this package.
 
 You can install the package via composer:
 
