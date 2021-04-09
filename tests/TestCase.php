@@ -23,11 +23,18 @@ abstract class TestCase extends Orchestra
         ];
     }
 
+    /*
+     * uses different table names for each test class to support 
+     * running tests in parallel.
+     */
     protected function setUpDatabase()
     {
-        Schema::dropIfExists('test_models');
+        $parts = explode('\\', static::class);
+        $class = array_pop($parts);
+        
+        Schema::dropIfExists("test_models_{$class}");
 
-        Schema::create('test_models', function (Blueprint $table) {
+        Schema::create("test_models_{$class}", function (Blueprint $table) {
             $table->increments('id');
             $table->schemalessAttributes();
         });
