@@ -12,7 +12,7 @@ use Spatie\SchemalessAttributes\Casts\SchemalessAttributes as SchemalessAttribut
  */
 trait SchemalessAttributesTrait
 {
-    public function initializeSchemalessAttributesTrait()
+    public function initializeSchemalessAttributesTrait(): void
     {
         foreach ($this->getSchemalessAttributes() as $attribute) {
             $this->casts[$attribute] = SchemalessAttributesCast::class;
@@ -21,9 +21,7 @@ trait SchemalessAttributesTrait
 
     public function getSchemalessAttributes(): array
     {
-        return isset($this->schemalessAttributes)
-            ? $this->schemalessAttributes
-            : [];
+        return $this->schemalessAttributes ?? [];
     }
 
     /**
