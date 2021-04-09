@@ -2,7 +2,7 @@ version: "2"
 services:
     mysql:
         restart: always
-        image: mysql/mysql-server:5.7
+        image: mysql/mysql-server:8.0
         environment:
             MYSQL_ROOT_PASSWORD: "root_password"
             MYSQL_DATABASE: "laravel_schemaless_attributes"
