@@ -20,7 +20,9 @@ trait SchemalessAttributesTrait
 
     public function getSchemalessAttributes(): array
     {
-        return isset($this->schemalessAttributes) ? $this->schemalessAttributes : [];
+        return isset($this->schemalessAttributes)
+            ? $this->schemalessAttributes
+            : [];
     }
 
     /**
@@ -29,7 +31,7 @@ trait SchemalessAttributesTrait
      */
     public function __get($key)
     {
-        if (in_array($key, $this->getSchemalessAttributes())) {
+        if (in_array($key, $this->getSchemalessAttributes(), true)) {
             return SchemalessAttributes::createForModel($this, $key);
         }
 
