@@ -18,7 +18,7 @@ use JsonSerializable;
  */
 class SchemalessAttributes implements ArrayAccess, Arrayable, Countable, IteratorAggregate, Jsonable, JsonSerializable
 {
-    protected Model  $model;
+    protected Model $model;
 
     protected string $sourceAttributeName;
 
@@ -98,7 +98,7 @@ class SchemalessAttributes implements ArrayAccess, Arrayable, Countable, Iterato
         return $this->override($items);
     }
 
-    public static function scopeWithSchemalessAttributes(string $attributeName): Builder
+    public function modelScope(): Builder
     {
         $arguments = debug_backtrace()[1]['args'];
 
@@ -117,7 +117,7 @@ class SchemalessAttributes implements ArrayAccess, Arrayable, Countable, Iterato
         }
 
         foreach ($schemalessAttributes as $name => $value) {
-            $builder->where("{$attributeName}->{$name}", $value);
+            $builder->where("{$this->sourceAttributeName}->{$name}", $value);
         }
 
         return $builder;

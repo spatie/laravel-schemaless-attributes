@@ -4,7 +4,7 @@ namespace Spatie\SchemalessAttributes\Tests;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\SchemalessAttributes\SchemalessAttributes;
+use Spatie\SchemalessAttributes\Casts\SchemalessAttributes;
 
 class TestModel extends Model
 {
@@ -13,16 +13,11 @@ class TestModel extends Model
     public $guarded = [];
 
     public $casts = [
-        'schemaless_attributes' => 'array',
+        'schemaless_attributes' => SchemalessAttributes::class,
     ];
-
-    public function getSchemalessAttributesAttribute(): SchemalessAttributes
-    {
-        return SchemalessAttributes::createForModel($this, 'schemaless_attributes');
-    }
 
     public function scopeWithSchemalessAttributes(): Builder
     {
-        return SchemalessAttributes::scopeWithSchemalessAttributes('schemaless_attributes');
+        return $this->schemaless_attributes->modelScope();
     }
 }

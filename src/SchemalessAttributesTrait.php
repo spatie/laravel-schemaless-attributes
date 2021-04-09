@@ -3,6 +3,7 @@
 namespace Spatie\SchemalessAttributes;
 
 use Illuminate\Support\Collection;
+use Spatie\SchemalessAttributes\Casts\SchemalessAttributes as SchemalessAttributesCast;
 
 /**
  * @property array $schemalessAttributes
@@ -14,7 +15,7 @@ trait SchemalessAttributesTrait
     public function initializeSchemalessAttributesTrait()
     {
         foreach ($this->getSchemalessAttributes() as $attribute) {
-            $this->casts[$attribute] = 'array';
+            $this->casts[$attribute] = SchemalessAttributesCast::class;
         }
     }
 
