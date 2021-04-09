@@ -35,7 +35,7 @@ $yourModel->extra_attributes->get('rey.side'); // returns 'light'
 // retrieve default value when attribute is not exists
 $yourModel->extra_attributes->get('non_existing', 'default'); // returns 'default'
 
-// it has a scope to retrieve all models with the given schemaless attributes
+// it has a modelScope to retrieve all models with the given schemaless attributes
 $yourModel->withSchemalessAttributes(['name' => 'value', 'name2' => 'value2'])->get();
 
 // delete key & value
@@ -55,6 +55,8 @@ We highly appreciate you sending us a postcard from your hometown, mentioning wh
 This package requires a database with support for `json` columns like MySQL 5.7 or higher.
 
 ## Installation
+
+> For Laravel versions 6 & 7 or PHP 7, use version 1.x of this package.
 
 You can install the package via composer:
 
@@ -76,29 +78,24 @@ Schema::table('your_models', function (Blueprint $table) {
 
 ### Preparing the model
 
-In order to work with the schemaless attributes you'll need to add a cast, an accessor and a scopes on your model. Here's an example of what you need to add if you've chosen `extra_attributes` as your column name.
+In order to work with the schemaless attributes you'll need to add a custom cast and a scope on your model. Here's an example of what you need to add if you've chosen `extra_attributes` as your column name.
 
 ```php
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
-use Spatie\SchemalessAttributes\SchemalessAttributes;
+use Spatie\SchemalessAttributes\Casts\SchemalessAttributes;
 
 class TestModel extends Model
 {
     // ...
 
     public $casts = [
-        'extra_attributes' => 'array',
+        'extra_attributes' => SchemalessAttributes::class,
     ];
-
-    public function getExtraAttributesAttribute(): SchemalessAttributes
-    {
-        return SchemalessAttributes::createForModel($this, 'extra_attributes');
-    }
 
     public function scopeWithExtraAttributes(): Builder
     {
-        return SchemalessAttributes::scopeWithSchemalessAttributes('extra_attributes');
+        return $this->extra_attributes->modelCast();
     }
 
     // ...
@@ -129,12 +126,12 @@ class TestModel extends Model
 
     public function scopeWithExtraAttributes(): Builder
     {
-        return SchemalessAttributes::scopeWithSchemalessAttributes('extra_attributes');
+        return $this->extra_attributes->modelScope();
     }
     
     public function scopeWithOtherExtraAttributes(): Builder
     {
-        return SchemalessAttributes::scopeWithSchemalessAttributes('other_extra_attributes');
+        return $this->other_extra_attributes->modelScope();
     }
 
     // ...
@@ -149,18 +146,18 @@ namespace App\Models\Concerns;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
-use Spatie\SchemalessAttributes\SchemalessAttributes;
+use Spatie\SchemalessAttributes\Casts\SchemalessAttributes;
 
 trait HasSchemalessAttributes
 {
-    public function getExtraAttributesAttribute(): SchemalessAttributes
+    public function initializeHasSchemalessAttributesTrait()
     {
-       return SchemalessAttributes::createForModel($this, 'extra_attributes');
+        $this->casts['extra_attributes'] = SchemalessAttributes::class;
     }
-
+    
     public function scopeWithExtraAttributes(): Builder
     {
-        return SchemalessAttributes::scopeWithSchemalessAttributes('extra_attributes');
+        return $this->extra_attributes->modelScope();
     }
 }
 ```
@@ -221,14 +218,14 @@ $yourModel->save(); // Persists both normal and schemaless attributes
 
 ### Retrieving models with specific schemaless attributes
 
-Here's how you can use the provided scope.
+Here's how you can use the provided modelScope.
 
 ```php
 // Returns all models that have all the given schemaless attributes
 $yourModel->withExtraAttributes(['name' => 'value', 'name2' => 'value2'])->get();
 ```
 
-If you only want to search on a single custom attribute, you can use the scope like this
+If you only want to search on a single custom attribute, you can use the modelScope like this
 
 ```php
 // returns all models that have a schemaless attribute `name` set to `value`
@@ -239,21 +236,21 @@ $yourModel->withExtraAttributes('name', 'value')->get();
 
 First create a MySQL database named `laravel_schemaless_attributes`. After that you can run the tests with:
 
-``` bash
+```bash
 composer test
 ```
 
 ## Changelog
 
-Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
+Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
 
 ## Contributing
 
-Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
+Please see [CONTRIBUTING](.github/CONTRIBUTING.md) for details.
 
-## Security
+## Security Vulnerabilities
 
-If you discover any security related issues, please email freek@spatie.be instead of using the issue tracker.
+Please review [our security policy](../../security/policy) on how to report security vulnerabilities.
 
 ## Credits
 

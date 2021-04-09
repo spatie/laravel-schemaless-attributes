@@ -8,25 +8,24 @@ jobs:
         strategy:
             fail-fast: true
             matrix:
-                php: [7.3, 7.4, 8.0]
-                laravel: [6.*, 7.*, 8.*]
+                php: [8.0]
+                laravel: [8.*]
                 dependency-version: [prefer-lowest, prefer-stable]
                 include:
                     -   laravel: 8.*
-                        testbench: 6.*
-                    -   laravel: 7.*
-                        testbench: 5.*
-                    -   laravel: 6.*
-                        testbench: 4.*
+                        testbench: '^6.15'
 
         name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.dependency-version }}
 
         services:
             mysql:
-                image: mysql:5.7
+                image: mysql:8.0
                 env:
                     MYSQL_ALLOW_EMPTY_PASSWORD: yes
-                    MYSQL_DATABASE: laravel_tags
+                    MYSQL_DATABASE: laravel_schemaless_attributes
+                    MYSQL_ROOT_PASSWORD: root_password
+                    MYSQL_USER: username
+                    MYSQL_PASSWORD: password
                 ports:
                     - 3306
                 options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3

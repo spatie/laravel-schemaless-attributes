@@ -3,11 +3,18 @@
 namespace Spatie\SchemalessAttributes;
 
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\ServiceProvider;
+use Spatie\LaravelPackageTools\Package;
+use Spatie\LaravelPackageTools\PackageServiceProvider;
 
-class SchemalessAttributesServiceProvider extends ServiceProvider
+class SchemalessAttributesServiceProvider extends PackageServiceProvider
 {
-    public function register()
+    public function configurePackage(Package $package): void
+    {
+        $package
+            ->name('laravel-schemaless-attributes');
+    }
+
+    public function registeringPackage()
     {
         Blueprint::macro('schemalessAttributes', function (string $columnName = 'schemaless_attributes') {
             return $this->json($columnName)->nullable();

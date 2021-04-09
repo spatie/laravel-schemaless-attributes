@@ -18,14 +18,11 @@ use JsonSerializable;
  */
 class SchemalessAttributes implements ArrayAccess, Arrayable, Countable, IteratorAggregate, Jsonable, JsonSerializable
 {
-    /** @var \Illuminate\Database\Eloquent\Model */
-    protected $model;
+    protected Model $model;
 
-    /** @var string */
-    protected $sourceAttributeName;
+    protected string $sourceAttributeName;
 
-    /** @var Collection */
-    protected $collection;
+    protected Collection $collection;
 
     public static function createForModel(Model $model, string $sourceAttributeName): self
     {
@@ -74,28 +71,12 @@ class SchemalessAttributes implements ArrayAccess, Arrayable, Countable, Iterato
         return empty($property);
     }
 
-    /**
-     * @see Collection::get()
-     *
-     * @param $key
-     * @param null $default
-     *
-     * @return mixed
-     */
-    public function get($key, $default = null)
+    public function get($key, mixed $default = null): mixed
     {
         return data_get($this->collection, $key, $default);
     }
 
-    /**
-     * @see Collection::set()
-     *
-     * @param $key
-     * @param $value
-     *
-     * @return mixed
-     */
-    public function set($key, $value = null)
+    public function set($key, mixed $value = null): static
     {
         if (is_iterable($key)) {
             return $this->override($this->collection->merge($key));
@@ -106,14 +87,7 @@ class SchemalessAttributes implements ArrayAccess, Arrayable, Countable, Iterato
         return $this->override(data_set($items, $key, $value));
     }
 
-    /**
-     * @see Collection::forget()
-     *
-     * @param $keys
-     *
-     * @return SchemalessAttributes
-     */
-    public function forget($keys)
+    public function forget($keys): static
     {
         $items = $this->collection->toArray();
 
@@ -124,7 +98,7 @@ class SchemalessAttributes implements ArrayAccess, Arrayable, Countable, Iterato
         return $this->override($items);
     }
 
-    public static function scopeWithSchemalessAttributes(string $attributeName): Builder
+    public function modelScope(): Builder
     {
         $arguments = debug_backtrace()[1]['args'];
 
@@ -143,7 +117,7 @@ class SchemalessAttributes implements ArrayAccess, Arrayable, Countable, Iterato
         }
 
         foreach ($schemalessAttributes as $name => $value) {
-            $builder->where("{$attributeName}->{$name}", $value);
+            $builder->where("{$this->sourceAttributeName}->{$name}", $value);
         }
 
         return $builder;
@@ -198,10 +172,10 @@ class SchemalessAttributes implements ArrayAccess, Arrayable, Countable, Iterato
     {
         $attributes = $this->model->getAttributes()[$this->sourceAttributeName] ?? '{}';
 
-        return $attributes == '""' ? [] : $this->model->fromJson($attributes);
+        return $attributes === '""' ? [] : $this->model->fromJson($attributes);
     }
 
-    protected function override(iterable $collection)
+    protected function override(iterable $collection): static
     {
         $this->collection = new Collection($collection);
         $this->model->{$this->sourceAttributeName} = $this->collection->toArray();

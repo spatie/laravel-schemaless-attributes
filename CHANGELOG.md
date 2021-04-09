@@ -2,6 +2,15 @@
 
 All notable changes to `laravel-schemaless-attributes` will be documented in this file
 
+## 2.0.0 - 2021-04-09
+
+- require PHP 8+
+- use PHP 8 syntax where possible
+- drop support for PHP 7
+- drop support for Laravel 6
+- implement `spatie/laravel-package-tools`
+- implement custom class attribute casting
+
 ## 1.8.3 - 2020-11-04
 
 - allow PHP 8.0
