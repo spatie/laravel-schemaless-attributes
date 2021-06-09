@@ -12,3 +12,4 @@ testbench.yaml
 vendor
 node_modules
 .env
+.php-cs-fixer.cache
