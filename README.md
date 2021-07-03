@@ -95,7 +95,7 @@ class TestModel extends Model
 
     public function scopeWithExtraAttributes(): Builder
     {
-        return $this->extra_attributes->modelCast();
+        return $this->extra_attributes->modelScope();
     }
 
     // ...
