@@ -232,6 +232,13 @@ If you only want to search on a single custom attribute, you can use the modelSc
 $yourModel->withExtraAttributes('name', 'value')->get();
 ```
 
+If you only want to search on a nested custom attribute, you can use the modelScope like this
+
+```php
+// returns all models that have a schemaless nested attribute `han.side` set to `light`
+$yourModel->withExtraAttributes('han->side', 'light')->get();
+```
+
 ## Testing
 
 First create a MySQL database named `laravel_schemaless_attributes`. After that you can run the tests with:
