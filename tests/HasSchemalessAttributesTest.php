@@ -2,7 +2,6 @@
 
 namespace Spatie\SchemalessAttributes\Tests;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
 class HasSchemalessAttributesTest extends TestCase
