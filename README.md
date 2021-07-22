@@ -150,7 +150,7 @@ use Spatie\SchemalessAttributes\Casts\SchemalessAttributes;
 
 trait HasSchemalessAttributes
 {
-    public function initializeHasSchemalessAttributesTrait()
+    public function initializeHasSchemalessAttributes()
     {
         $this->casts['extra_attributes'] = SchemalessAttributes::class;
     }
