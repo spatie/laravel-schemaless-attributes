@@ -2,6 +2,7 @@
 
 namespace Spatie\SchemalessAttributes\Tests;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
 class HasSchemalessAttributesTest extends TestCase
@@ -9,11 +10,16 @@ class HasSchemalessAttributesTest extends TestCase
     /** @var \Spatie\SchemalessAttributes\Tests\TestModel */
     protected $testModel;
 
+    /** @var \Spatie\SchemalessAttributes\Tests\TestModel */
+    protected $testModelUsedTrait;
+
     public function setUp(): void
     {
         parent::setUp();
 
         $this->testModel = TestModel::create();
+
+        $this->testModelUsedTrait = new TestModel();
     }
 
     /** @test */
@@ -429,6 +435,14 @@ class HasSchemalessAttributesTest extends TestCase
             'lorem' => 'ipsum',
             'dolor' => 'amet',
         ], $this->testModel->schemaless_attributes->toArray());
+    }
+
+    /** @test */
+    public function an_schemaless_attribute_can_be_set_if_the_has_schemaless_atrributes_trait_is_used(): void
+    {
+        $this->testModelUsedTrait->schemaless_attributes->name = 'value';
+
+        $this->assertEquals('value', $this->testModelUsedTrait->schemaless_attributes->name);
     }
 
     protected function assertContainsModels(array $expectedModels, Collection $actualModels)
