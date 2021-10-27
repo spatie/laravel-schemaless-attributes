@@ -42,6 +42,14 @@ class HasSchemalessAttributesTest extends TestCase
     }
 
     /** @test */
+    public function an_schemaless_attribute_can_be_set_from_json()
+    {
+        $this->testModel->schemaless_attributes = json_encode(['name' => 'value']);
+
+        $this->assertEquals('value', $this->testModel->schemaless_attributes->name);
+    }
+
+    /** @test */
     public function it_can_determine_if_it_has_a_schemaless_attribute()
     {
         $this->assertFalse($this->testModel->schemaless_attributes->has('name'));
@@ -241,6 +249,19 @@ class HasSchemalessAttributesTest extends TestCase
         ];
 
         $testModel = TestModel::create(['schemaless_attributes' => $array]);
+
+        $this->assertEquals($array, $testModel->schemaless_attributes->all());
+    }
+
+    /** @test */
+    public function it_can_and_save_schemaless_attributes_from_json()
+    {
+        $array = [
+            'name' => 'value',
+            'name2' => 'value2',
+        ];
+
+        $testModel = TestModel::create(['schemaless_attributes' => json_encode($array)]);
 
         $this->assertEquals($array, $testModel->schemaless_attributes->all());
     }

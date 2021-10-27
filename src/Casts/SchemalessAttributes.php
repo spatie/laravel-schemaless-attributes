@@ -32,6 +32,19 @@ class SchemalessAttributes implements CastsAttributes
      */
     public function set($model, $key, $value, $attributes)
     {
+        if ($this->isJson($value)) {
+            return $value;
+        }
+
         return json_encode($value);
+    }
+
+    protected function isJson($value): bool
+    {
+        if (! is_string($value)) {
+            return false;
+        }
+
+        return  $value === json_encode(json_decode($value));
     }
 }
