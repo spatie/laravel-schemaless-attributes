@@ -4,10 +4,8 @@ services:
         restart: always
         image: mysql/mysql-server:8.0
         environment:
-            MYSQL_ROOT_PASSWORD: "root_password"
+            MYSQL_ROOT_PASSWORD: null
             MYSQL_DATABASE: "laravel_schemaless_attributes"
-            MYSQL_USER: "username"
-            MYSQL_PASSWORD: "password"
             MYSQL_ROOT_HOST: "0.0.0.0"
             MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
         ports:
