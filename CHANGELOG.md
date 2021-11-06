@@ -2,6 +2,13 @@
 
 All notable changes to `laravel-schemaless-attributes` will be documented in this file
 
+## 2.0.1 - 2021-11-06
+
+- Update README.md by @markinigor in https://github.com/spatie/laravel-schemaless-attributes/pull/82
+- Document retrieving models via nested attributes by @EricBusch in https://github.com/spatie/laravel-schemaless-attributes/pull/83
+- Fix the wrong trait initializer in readme by @lava83 in https://github.com/spatie/laravel-schemaless-attributes/pull/88
+- Support json string on cast setter by @erikn69 in https://github.com/spatie/laravel-schemaless-attributes/pull/90
+
 ## 2.0.0 - 2021-04-09
 
 - require PHP 8+
