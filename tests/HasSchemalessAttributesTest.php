@@ -274,16 +274,25 @@ class HasSchemalessAttributesTest extends TestCase
         $model1 = TestModel::create(['schemaless_attributes' => [
             'name' => 'value',
             'name2' => 'value2',
+            'arr' => [
+                'subKey1' => 'subVal1'
+            ]
         ]]);
 
         $model2 = TestModel::create(['schemaless_attributes' => [
             'name' => 'value',
             'name2' => 'value2',
+            'arr' => [
+                'subKey1' => 'subVal1'
+            ]
         ]]);
 
         $model3 = TestModel::create(['schemaless_attributes' => [
             'name' => 'value',
             'name2' => 'value3',
+            'arr' => [
+                'subKey1' => 'subVal2'
+            ]
         ]]);
 
         $this->assertContainsModels([
@@ -306,7 +315,16 @@ class HasSchemalessAttributesTest extends TestCase
         ], TestModel::withSchemalessAttributes('name', 'value')->get());
 
         $this->assertContainsModels([
-        ], TestModel::withSchemalessAttributes('name', 'non-existing-value')->get());
+            $model1, $model2,
+        ], TestModel::withSchemalessAttributes('name2', '!=', 'value3')->get());
+
+        $this->assertContainsModels([
+            $model3,
+        ], TestModel::withSchemalessAttributes('arr->subKey1', 'subVal2')->get());
+
+        $this->assertContainsModels([
+            $model1, $model2,
+        ], TestModel::withSchemalessAttributes('arr->subKey1', '!=', 'subVal2')->get());
 
         $this->assertContainsModels([
         ], TestModel::withSchemalessAttributes('name', 'non-existing-value')->get());

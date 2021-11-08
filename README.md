@@ -232,6 +232,13 @@ If you only want to search on a single custom attribute, you can use the modelSc
 $yourModel->withExtraAttributes('name', 'value')->get();
 ```
 
+Also, if you only want to search on a single custom attribute with a custom operator, you can use the modelScope like this
+
+```php
+// returns all models that have a schemaless attribute `name` starting with `value`
+$yourModel->withExtraAttributes('name', 'LIKE', 'value%')->get();
+```
+
 If you only want to search on a nested custom attribute, you can use the modelScope like this
 
 ```php
