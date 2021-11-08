@@ -275,24 +275,24 @@ class HasSchemalessAttributesTest extends TestCase
             'name' => 'value',
             'name2' => 'value2',
             'arr' => [
-                'subKey1' => 'subVal1'
-            ]
+                'subKey1' => 'subVal1',
+            ],
         ]]);
 
         $model2 = TestModel::create(['schemaless_attributes' => [
             'name' => 'value',
             'name2' => 'value2',
             'arr' => [
-                'subKey1' => 'subVal1'
-            ]
+                'subKey1' => 'subVal1',
+            ],
         ]]);
 
         $model3 = TestModel::create(['schemaless_attributes' => [
             'name' => 'value',
             'name2' => 'value3',
             'arr' => [
-                'subKey1' => 'subVal2'
-            ]
+                'subKey1' => 'subVal2',
+            ],
         ]]);
 
         $this->assertContainsModels([
