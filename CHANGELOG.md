@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-schemaless-attributes` will be documented in this file
 
+## 2.1.0 - 2021-11-08
+
+- Scope retrieving models with operator by @erikn69 in https://github.com/spatie/laravel-schemaless-attributes/pull/89
+
 ## 2.0.1 - 2021-11-06
 
 - Update README.md by @markinigor in https://github.com/spatie/laravel-schemaless-attributes/pull/82
