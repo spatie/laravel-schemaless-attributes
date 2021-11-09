@@ -50,6 +50,31 @@ class HasSchemalessAttributesTest extends TestCase
     }
 
     /** @test */
+    public function an_schemaless_attribute_uses_fallback_empty_array_on_non_valid_values()
+    {
+        $this->testModel->schemaless_attributes = 'string';
+        $this->assertEquals([], $this->testModel->schemaless_attributes->all());
+
+        $this->testModel->schemaless_attributes = '""'; // not array json
+        $this->assertEquals([], $this->testModel->schemaless_attributes->all());
+
+        $this->testModel->schemaless_attributes = "{'name':'value'}"; // invalid json format
+        $this->assertEquals([], $this->testModel->schemaless_attributes->all());
+
+        $this->testModel->schemaless_attributes = null;
+        $this->assertEquals([], $this->testModel->schemaless_attributes->all());
+
+        $this->testModel->schemaless_attributes = false;
+        $this->assertEquals([], $this->testModel->schemaless_attributes->all());
+
+        $this->testModel->schemaless_attributes = 1;
+        $this->assertEquals([], $this->testModel->schemaless_attributes->all());
+
+        $this->testModel->schemaless_attributes = 0.1;
+        $this->assertEquals([], $this->testModel->schemaless_attributes->all());
+    }
+
+    /** @test */
     public function it_can_determine_if_it_has_a_schemaless_attribute()
     {
         $this->assertFalse($this->testModel->schemaless_attributes->has('name'));
@@ -264,6 +289,31 @@ class HasSchemalessAttributesTest extends TestCase
         $testModel = TestModel::create(['schemaless_attributes' => json_encode($array)]);
 
         $this->assertEquals($array, $testModel->schemaless_attributes->all());
+    }
+
+    /** @test */
+    public function it_can_and_save_schemaless_attributes_as_null_when_non_valid_values()
+    {
+        $testModel = TestModel::create(['schemaless_attributes' => 'string']);
+        $this->assertEquals(null, $testModel->getAttributes()['schemaless_attributes']);
+
+        $testModel = TestModel::create(['schemaless_attributes' => '""']); // not array json
+        $this->assertEquals(null, $testModel->getAttributes()['schemaless_attributes']);
+
+        $testModel = TestModel::create(['schemaless_attributes' => "{'name':'value'}"]); // invalid json format
+        $this->assertEquals(null, $testModel->getAttributes()['schemaless_attributes']);
+
+        $testModel = TestModel::create(['schemaless_attributes' => null]);
+        $this->assertEquals(null, $testModel->getAttributes()['schemaless_attributes']);
+
+        $testModel = TestModel::create(['schemaless_attributes' => false]);
+        $this->assertEquals(null, $testModel->getAttributes()['schemaless_attributes']);
+
+        $testModel = TestModel::create(['schemaless_attributes' => 1]);
+        $this->assertEquals(null, $testModel->getAttributes()['schemaless_attributes']);
+
+        $testModel = TestModel::create(['schemaless_attributes' => 0.1]);
+        $this->assertEquals(null, $testModel->getAttributes()['schemaless_attributes']);
     }
 
     /** @test */

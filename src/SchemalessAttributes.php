@@ -177,7 +177,9 @@ class SchemalessAttributes implements ArrayAccess, Arrayable, Countable, Iterato
     {
         $attributes = $this->model->getAttributes()[$this->sourceAttributeName] ?? '{}';
 
-        return $attributes === '""' ? [] : $this->model->fromJson($attributes);
+        $array = $this->model->fromJson($attributes);
+
+        return is_array($array) ? $array : [];
     }
 
     protected function override(iterable $collection): static
