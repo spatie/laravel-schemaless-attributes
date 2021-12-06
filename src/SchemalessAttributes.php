@@ -12,6 +12,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use IteratorAggregate;
 use JsonSerializable;
+use Traversable;
 
 /**
  * @mixin Collection
@@ -52,19 +53,19 @@ class SchemalessAttributes implements ArrayAccess, Arrayable, Countable, Iterato
         return $this->get($name);
     }
 
-    public function __set($name, $value)
+    public function __set($name, $value): void
     {
         $this->set($name, $value);
     }
 
-    public function __isset($name)
+    public function __isset($name): bool
     {
         $property = $this->get($name);
 
         return isset($property);
     }
 
-    public function __empty($name)
+    public function __empty($name): bool
     {
         $property = $this->get($name);
 
@@ -128,47 +129,47 @@ class SchemalessAttributes implements ArrayAccess, Arrayable, Countable, Iterato
         return $builder;
     }
 
-    public function offsetGet($offset)
+    public function offsetGet($offset): mixed
     {
         return $this->get($offset);
     }
 
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return $this->collection->offsetExists($offset);
     }
 
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         $this->set($offset, $value);
     }
 
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         $this->forget($offset);
     }
 
-    public function toArray()
+    public function toArray(): array
     {
         return $this->collection->toArray();
     }
 
-    public function toJson($options = 0)
+    public function toJson($options = 0): string
     {
         return $this->collection->toJson($options);
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         return $this->collection->jsonSerialize();
     }
 
-    public function count()
+    public function count(): int
     {
         return $this->collection->count();
     }
 
-    public function getIterator()
+    public function getIterator(): Traversable
     {
         return $this->collection->getIterator();
     }

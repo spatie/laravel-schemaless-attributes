@@ -14,7 +14,7 @@ class SchemalessAttributesServiceProvider extends PackageServiceProvider
             ->name('laravel-schemaless-attributes');
     }
 
-    public function registeringPackage()
+    public function registeringPackage(): void
     {
         Blueprint::macro('schemalessAttributes', function (string $columnName = 'schemaless_attributes') {
             return $this->json($columnName)->nullable();
