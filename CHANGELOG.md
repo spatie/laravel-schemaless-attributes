@@ -2,6 +2,18 @@
 
 All notable changes to `laravel-schemaless-attributes` will be documented in this file
 
+## 2.2.0 - 2021-12-06
+
+## What's Changed
+
+- add typehinting by @Nielsvanpach in https://github.com/spatie/laravel-schemaless-attributes/pull/93
+
+## New Contributors
+
+- @Nielsvanpach made their first contribution in https://github.com/spatie/laravel-schemaless-attributes/pull/93
+
+**Full Changelog**: https://github.com/spatie/laravel-schemaless-attributes/compare/2.1.1...2.2.0
+
 ## 2.1.1 - 2021-11-09
 
 - improve edge case
@@ -72,7 +84,7 @@ All notable changes to `laravel-schemaless-attributes` will be documented in thi
 
 ## 1.2.0 - 2018-09-11
 
-- add support for wildcards 
+- add support for wildcards
 
 ## 1.1.3 - 2018-07-11
 
