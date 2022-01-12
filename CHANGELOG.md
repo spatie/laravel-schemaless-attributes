@@ -2,6 +2,15 @@
 
 All notable changes to `laravel-schemaless-attributes` will be documented in this file
 
+## 2.3.0 - 2022-01-12
+
+## What's Changed
+
+- Update .gitattributes by @erikn69 in https://github.com/spatie/laravel-schemaless-attributes/pull/95
+- Allow Laravel 9
+
+**Full Changelog**: https://github.com/spatie/laravel-schemaless-attributes/compare/2.2.0...2.3.0
+
 ## 2.2.0 - 2021-12-06
 
 ## What's Changed
