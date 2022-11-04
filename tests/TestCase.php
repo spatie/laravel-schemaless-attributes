@@ -9,7 +9,7 @@ use Spatie\SchemalessAttributes\SchemalessAttributesServiceProvider;
 
 abstract class TestCase extends Orchestra
 {
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -35,10 +35,10 @@ abstract class TestCase extends Orchestra
             $table->increments('id');
             $table->schemalessAttributes();
         });
-        
+
         $parts = explode('\\', static::class);
         $class = array_pop($parts);
-        
+
         Schema::dropIfExists("test_models_{$class}");
 
         Schema::create("test_models_{$class}", function (Blueprint $table) {

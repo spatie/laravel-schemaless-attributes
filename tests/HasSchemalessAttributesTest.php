@@ -4,539 +4,450 @@ namespace Spatie\SchemalessAttributes\Tests;
 
 use Illuminate\Support\Collection;
 
-class HasSchemalessAttributesTest extends TestCase
+use function PHPUnit\Framework\assertEquals;
+
+function assertContainsModels(array $expectedModels, Collection $actualModels): void
 {
-    /** @var \Spatie\SchemalessAttributes\Tests\TestModel */
-    protected $testModel;
+    $assertionFailedMessage = 'Expected ' . count($expectedModels) . ' models. Got ' . $actualModels->count() . ' models';
 
-    /** @var \Spatie\SchemalessAttributes\Tests\TestModel */
-    protected $testModelUsedTrait;
+    assertEquals(count($expectedModels), $actualModels->count(), $assertionFailedMessage);
+}
 
-    public function setUp(): void
-    {
-        parent::setUp();
+beforeEach(function () {
+    $this->testModel = TestModel::create();
+    $this->testModelUsedTrait = new TestModel();
+});
 
-        $this->testModel = TestModel::create();
+test('getting a non existing schemaless attribute returns `null`')
+    ->expect(fn () => $this->testModel->schemaless_attributes->non_existing)
+    ->toBeNull();
 
-        $this->testModelUsedTrait = new TestModel();
-    }
+test('default value can be passed when getting a non existing schemaless attribute')
+    ->expect(fn () => $this->testModel->schemaless_attributes->get('non_existing', 'default'))
+    ->toEqual('default');
 
-    /** @test */
-    public function getting_a_non_existing_schemaless_attribute_returns_null()
-    {
-        $this->assertNull($this->testModel->schemaless_attributes->non_existing);
-    }
+test('a schemaless attribute can be set', function () {
+    $this->testModel->schemaless_attributes->name = 'value';
 
-    /** @test */
-    public function default_value_can_be_passed_when_getting_a_non_existing_schemaless_attribute()
-    {
-        $this->assertEquals('default', $this->testModel->schemaless_attributes->get('non_existing', 'default'));
-    }
+    expect($this->testModel->schemaless_attributes->name)->toEqual('value');
+});
 
-    /** @test */
-    public function an_schemaless_attribute_can_be_set()
-    {
-        $this->testModel->schemaless_attributes->name = 'value';
+test('a schemaless attribute can be set from JSON', function () {
+    $this->testModel->schemaless_attributes = json_encode(['name' => 'value']);
 
-        $this->assertEquals('value', $this->testModel->schemaless_attributes->name);
-    }
+    expect($this->testModel->schemaless_attributes->name)->toEqual('value');
+});
 
-    /** @test */
-    public function an_schemaless_attribute_can_be_set_from_json()
-    {
-        $this->testModel->schemaless_attributes = json_encode(['name' => 'value']);
+test('a schemaless attribute uses fallback empty array on non valid values')
+    ->with('non-valid-values')
+    ->tap(
+        fn (mixed $value) => $this->testModel->schemaless_attributes = $value
+    )
+    ->expect(fn () => $this->testModel->schemaless_attributes->all())
+    ->toEqual([]);
 
-        $this->assertEquals('value', $this->testModel->schemaless_attributes->name);
-    }
+it('can determine if it has schemaless attribute', function () {
+    expect($this->testModel->schemaless_attributes->has('name'))->toBeFalse();
 
-    /** @test */
-    public function an_schemaless_attribute_uses_fallback_empty_array_on_non_valid_values()
-    {
-        $this->testModel->schemaless_attributes = 'string';
-        $this->assertEquals([], $this->testModel->schemaless_attributes->all());
+    $this->testModel->schemaless_attributes->name = 'value';
 
-        $this->testModel->schemaless_attributes = '""'; // not array json
-        $this->assertEquals([], $this->testModel->schemaless_attributes->all());
+    expect($this->testModel->schemaless_attributes->has('name'))->toBeTrue();
+});
 
-        $this->testModel->schemaless_attributes = "{'name':'value'}"; // invalid json format
-        $this->assertEquals([], $this->testModel->schemaless_attributes->all());
+test('schemaless attributes will get saved with the model', function () {
+    $this->testModel->schemaless_attributes->name = 'value';
 
-        $this->testModel->schemaless_attributes = null;
-        $this->assertEquals([], $this->testModel->schemaless_attributes->all());
+    $this->testModel->save();
 
-        $this->testModel->schemaless_attributes = false;
-        $this->assertEquals([], $this->testModel->schemaless_attributes->all());
+    expect($this->testModel->schemaless_attributes->name)->toEqual('value');
+});
 
-        $this->testModel->schemaless_attributes = 1;
-        $this->assertEquals([], $this->testModel->schemaless_attributes->all());
-
-        $this->testModel->schemaless_attributes = 0.1;
-        $this->assertEquals([], $this->testModel->schemaless_attributes->all());
-    }
-
-    /** @test */
-    public function it_can_determine_if_it_has_a_schemaless_attribute()
-    {
-        $this->assertFalse($this->testModel->schemaless_attributes->has('name'));
-
-        $this->testModel->schemaless_attributes->name = 'value';
-
-        $this->assertTrue($this->testModel->schemaless_attributes->has('name'));
-    }
-
-    /** @test */
-    public function schemaless_attributes_will_get_saved_with_the_model()
-    {
-        $this->testModel->schemaless_attributes->name = 'value';
-
-        $this->testModel->save();
-
-        $this->assertEquals('value', $this->testModel->schemaless_attributes->name);
-    }
-
-    /** @test */
-    public function checking_existing_schemaless_attribute_is_empty_with_direct_access()
-    {
+test(
+    'checking existing schemaless attribute is empty with direct access',
+    function () {
         $this->testModel->schemaless_attributes->name = 'value';
         $this->testModel->save();
 
-        $this->assertNotEmpty($this->testModel->schemaless_attributes->name);
-        $this->assertEmpty($this->testModel->schemaless_attributes->first_name);
+        expect($this->testModel->schemaless_attributes->name)->not->toBeEmpty()
+            ->and($this->testModel->schemaless_attributes->first_name)->toBeEmpty();
     }
+);
 
-    /** @test */
-    public function checking_existing_schemaless_attribute_is_empty_with_access_via_get()
-    {
-        $this->testModel->schemaless_attributes->name = 'value';
-        $this->testModel->save();
+test('checking existing schemaless attribute is empty with access via get', function () {
+    $this->testModel->schemaless_attributes->name = 'value';
+    $this->testModel->save();
 
-        $this->assertNotEmpty($this->testModel->schemaless_attributes->get('name'));
-        $this->assertEmpty($this->testModel->schemaless_attributes->get('first_name'));
+    expect($this->testModel->schemaless_attributes->get('name'))->not->toBeEmpty()
+        ->and($this->testModel->schemaless_attributes->get('first_name'))->toBeEmpty();
+});
+
+it('can handle an array', function () {
+    $array = [
+        'one' => 'value',
+        'two' => 'another value',
+    ];
+
+    $this->testModel->schemaless_attributes->array = $array;
+
+    expect($this->testModel->schemaless_attributes->array)->toEqual($array);
+});
+
+it('can get values using dot notation', function () {
+    $this->testModel->schemaless_attributes->rey = ['side' => 'light'];
+    $this->testModel->schemaless_attributes->snoke = ['side' => 'dark'];
+
+    expect(
+        $this->testModel->schemaless_attributes->get('rey.side')
+    )->toEqual('light');
+});
+
+it('can set values using dot notation', function () {
+    $this->testModel->schemaless_attributes->rey = ['side' => 'light'];
+    $this->testModel->schemaless_attributes->set('rey.side', 'dark');
+
+    expect(
+        $this->testModel->schemaless_attributes->get('rey.side')
+    )->toEqual('dark');
+});
+
+it('can get values using wildcards notation', function () {
+    $this->testModel->schemaless_attributes->rey = ['sides' => [
+        ['name' => 'light'],
+        ['name' => 'neutral'],
+        ['name' => 'dark'],
+    ]];
+
+    expect(
+        $this->testModel->schemaless_attributes->get('rey.sides.*.name')
+    )->toEqual(['light', 'neutral', 'dark']);
+});
+
+it('can set values using wildcard notation', function () {
+    $this->testModel->schemaless_attributes->rey = ['sides' => [
+        ['name' => 'light'],
+        ['name' => 'neutral'],
+        ['name' => 'dark'],
+    ]];
+
+    $this->testModel->schemaless_attributes->set('rey.sides.*.name', 'dark');
+
+    expect(
+        $this->testModel->schemaless_attributes->get('rey.sides.*.name')
+    )->toEqual(['dark', 'dark', 'dark']);
+});
+
+it('can set all schemaless attributes at once', function () {
+    $array = [
+        'rey' => ['side' => 'light'],
+        'snoke' => ['side' => 'dark'],
+    ];
+
+    $this->testModel->schemaless_attributes = $array;
+
+    expect($this->testModel->schemaless_attributes->all())->toEqual($array);
+});
+
+it('can forge a single schemaless attribute', function () {
+    $this->testModel->schemaless_attributes->name = 'value';
+
+    expect($this->testModel->schemaless_attributes->name)->toEqual('value');
+
+    $this->testModel->schemaless_attributes->forget('name');
+
+    expect($this->testModel->schemaless_attributes->name)->toBeNull();
+});
+
+it('can forget a schemaless attribute using dot notation', function () {
+    $this->testModel->schemaless_attributes->member = ['name' => 'John', 'age' => 30];
+
+    $this->testModel->schemaless_attributes->forget('member.age');
+
+    expect(
+        $this->testModel->schemaless_attributes->member
+    )->toEqual(['name' => 'John']);
+});
+
+it('can get all schemaless attributes', function () {
+    $this->testModel->schemaless_attributes = ['name' => 'value'];
+
+    expect(
+        $this->testModel->schemaless_attributes->all()
+    )->toEqual(['name' => 'value']);
+});
+
+it('will use the correct data type', function () {
+    $this->testModel->schemaless_attributes->bool = true;
+    $this->testModel->schemaless_attributes->float = 12.34;
+
+    $this->testModel->save();
+
+    $this->testModel->refresh();
+
+    expect($this->testModel->schemaless_attributes)
+        ->bool->toBeTrue()
+        ->float->toBe(12.34);
+});
+
+it('can be handled as an array', function () {
+    $this->testModel->schemaless_attributes['name'] = 'value';
+
+    expect($this->testModel->schemaless_attributes['name'])->toEqual('value')
+        ->and(isset($this->testModel->schemaless_attributes['name']))->toBeTrue();
+
+    unset($this->testModel->schemaless_attributes['name']);
+
+    expect(isset($this->testModel->schemaless_attributes['name']))->toBeFalse()
+        ->and($this->testModel->schemaless_attributes['name'])->toBeNull();
+});
+
+it('can be counted', function () {
+    expect($this->testModel->schemaless_attributes)->toHaveCount(0);
+
+    $this->testModel->schemaless_attributes->name = 'value';
+
+    expect($this->testModel->schemaless_attributes)->toHaveCount(1);
+});
+
+it('can be used as an arrayable', function () {
+    $this->testModel->schemaless_attributes->name = 'value';
+
+    expect($this->testModel->schemaless_attributes->all())
+        ->toEqual($this->testModel->schemaless_attributes->toArray());
+});
+
+it('can add and save schemaless attributes in one go', function () {
+    $array = [
+        'name' => 'value',
+        'name2' => 'value2',
+    ];
+
+    $testModel = TestModel::create(['schemaless_attributes' => $array]);
+
+    expect($testModel->schemaless_attributes->all())->toEqual($array);
+});
+
+it('can and save shemaless attributes from JSON', function () {
+    $array = [
+        'name' => 'value',
+        'name2' => 'value2',
+    ];
+
+    $testModel = TestModel::create(['schemaless_attributes' => json_encode($array)]);
+
+    expect($testModel->schemaless_attributes->all())->toEqual($array);
+});
+
+it('can save schemaless attributes as `null` when non valid valid values', function (mixed $value) {
+    $testModel = TestModel::create(['schemaless_attributes' => $value]);
+
+    expect($testModel->getAttributes()['schemaless_attributes'])->toBeNull();
+})->with('non-valid-values');
+
+it('has a scope to get models with the given schemaless attributes', function () {
+    TestModel::truncate();
+
+    $model1 = TestModel::create(['schemaless_attributes' => [
+        'name' => 'value',
+        'name2' => 'value2',
+        'arr' => [
+            'subKey1' => 'subVal1',
+        ],
+    ]]);
+
+    $model2 = TestModel::create(['schemaless_attributes' => [
+        'name' => 'value',
+        'name2' => 'value2',
+        'arr' => [
+            'subKey1' => 'subVal1',
+        ],
+    ]]);
+
+    $model3 = TestModel::create(['schemaless_attributes' => [
+        'name' => 'value',
+        'name2' => 'value3',
+        'arr' => [
+            'subKey1' => 'subVal2',
+        ],
+    ]]);
+
+    assertContainsModels([
+        $model1, $model2,
+    ], TestModel::withSchemalessAttributes(['name' => 'value', 'name2' => 'value2'])->get());
+
+    assertContainsModels([
+        $model3,
+    ], TestModel::withSchemalessAttributes(['name' => 'value', 'name2' => 'value3'])->get());
+
+    assertContainsModels([], TestModel::withSchemalessAttributes(['name' => 'value', 'non-existing' => 'value'])->get());
+
+    assertContainsModels([
+        $model1, $model2, $model3,
+    ], TestModel::withSchemalessAttributes([])->get());
+
+    assertContainsModels([
+        $model1, $model2, $model3,
+    ], TestModel::withSchemalessAttributes('name', 'value')->get());
+
+    assertContainsModels([
+        $model1, $model2,
+    ], TestModel::withSchemalessAttributes('name2', '!=', 'value3')->get());
+
+    assertContainsModels([
+        $model3,
+    ], TestModel::withSchemalessAttributes('arr->subKey1', 'subVal2')->get());
+
+    assertContainsModels([
+        $model1, $model2,
+    ], TestModel::withSchemalessAttributes('arr->subKey1', '!=', 'subVal2')->get());
+
+    assertContainsModels([], TestModel::withSchemalessAttributes('name', 'non-existing-value')->get());
+});
+
+it('can set multiple attributes one after the other', function () {
+    $this->testModel->schemaless_attributes->name = 'value';
+    $this->testModel->schemaless_attributes->name2 = 'value2';
+
+    expect($this->testModel->schemaless_attributes->all())->toEqual([
+        'name' => 'value',
+        'name2' => 'value2',
+    ]);
+});
+
+it('returns an array that can be looped', function () {
+    $this->testModel->schemaless_attributes->name = 'value';
+    $this->testModel->schemaless_attributes->name2 = 'value2';
+
+    $attributes = $this->testModel->schemaless_attributes->all();
+
+    expect($attributes)->toHaveCount(2);
+
+    foreach ($attributes as $key => $value) {
+        expect([$key, $value])->each->not->toBeNull();
     }
-
-    /** @test */
-    public function it_can_handle_an_array()
-    {
-        $array = [
-            'one' => 'value',
-            'two' => 'another value',
-        ];
-
-        $this->testModel->schemaless_attributes->array = $array;
-
-        $this->assertEquals($array, $this->testModel->schemaless_attributes->array);
-    }
-
-    /** @test */
-    public function it_can_get_values_using_dot_notation()
-    {
-        $this->testModel->schemaless_attributes->rey = ['side' => 'light'];
-        $this->testModel->schemaless_attributes->snoke = ['side' => 'dark'];
-
-        $this->assertEquals('light', $this->testModel->schemaless_attributes->get('rey.side'));
-    }
-
-    /** @test */
-    public function it_can_set_values_using_dot_notation()
-    {
-        $this->testModel->schemaless_attributes->rey = ['side' => 'light'];
-        $this->testModel->schemaless_attributes->set('rey.side', 'dark');
-
-        $this->assertEquals('dark', $this->testModel->schemaless_attributes->get('rey.side'));
-    }
-
-    /** @test */
-    public function it_can_get_values_using_wildcards_notation()
-    {
-        $this->testModel->schemaless_attributes->rey = ['sides' => [
-            ['name' => 'light'],
-            ['name' => 'neutral'],
-            ['name' => 'dark'],
-        ]];
-
-        $this->assertEquals(['light', 'neutral', 'dark'], $this->testModel->schemaless_attributes->get('rey.sides.*.name'));
-    }
-
-    /** @test */
-    public function it_can_set_values_using_wildcard_notation()
-    {
-        $this->testModel->schemaless_attributes->rey = ['sides' => [
-            ['name' => 'light'],
-            ['name' => 'neutral'],
-            ['name' => 'dark'],
-        ]];
-
-        $this->testModel->schemaless_attributes->set('rey.sides.*.name', 'dark');
-
-        $this->assertEquals(['dark', 'dark', 'dark'], $this->testModel->schemaless_attributes->get('rey.sides.*.name'));
-    }
-
-    /** @test */
-    public function it_can_set_all_schemaless_attributes_at_once()
-    {
-        $array = [
-            'rey' => ['side' => 'light'],
-            'snoke' => ['side' => 'dark'],
-        ];
-
-        $this->testModel->schemaless_attributes = $array;
-
-        $this->assertEquals($array, $this->testModel->schemaless_attributes->all());
-    }
-
-    /** @test */
-    public function it_can_forget_a_single_schemaless_attribute()
-    {
-        $this->testModel->schemaless_attributes->name = 'value';
-
-        $this->assertEquals('value', $this->testModel->schemaless_attributes->name);
-
-        $this->testModel->schemaless_attributes->forget('name');
-
-        $this->assertNull($this->testModel->schemaless_attributes->name);
-    }
-
-    /** @test */
-    public function it_can_forget_a_schemaless_attribute_using_dot_notation()
-    {
-        $this->testModel->schemaless_attributes->member = ['name' => 'John', 'age' => 30];
-
-        $this->testModel->schemaless_attributes->forget('member.age');
-
-        $this->assertEquals($this->testModel->schemaless_attributes->member, ['name' => 'John']);
-    }
-
-    /** @test */
-    public function it_can_get_all_schemaless_attributes()
-    {
-        $this->testModel->schemaless_attributes = ['name' => 'value'];
-
-        $this->assertEquals(['name' => 'value'], $this->testModel->schemaless_attributes->all());
-    }
-
-    /** @test */
-    public function it_will_use_the_correct_datatype()
-    {
-        $this->testModel->schemaless_attributes->bool = true;
-        $this->testModel->schemaless_attributes->float = 12.34;
-
-        $this->testModel->save();
-
-        $this->testModel->refresh();
-
-        $this->assertTrue($this->testModel->schemaless_attributes->bool);
-        $this->assertSame(12.34, $this->testModel->schemaless_attributes->float);
-    }
-
-    /** @test */
-    public function it_can_be_handled_as_an_array()
-    {
-        $this->testModel->schemaless_attributes['name'] = 'value';
-
-        $this->assertEquals('value', $this->testModel->schemaless_attributes['name']);
-
-        $this->assertTrue(isset($this->testModel->schemaless_attributes['name']));
-
-        unset($this->testModel->schemaless_attributes['name']);
-
-        $this->assertFalse(isset($this->testModel->schemaless_attributes['name']));
-
-        $this->assertNull($this->testModel->schemaless_attributes['name']);
-    }
-
-    /** @test */
-    public function it_can_be_counted()
-    {
-        $this->assertCount(0, $this->testModel->schemaless_attributes);
-
-        $this->testModel->schemaless_attributes->name = 'value';
-
-        $this->assertCount(1, $this->testModel->schemaless_attributes);
-    }
-
-    /** @test */
-    public function it_can_be_used_as_an_arrayable()
-    {
-        $this->testModel->schemaless_attributes->name = 'value';
-
-        $this->assertEquals(
-            $this->testModel->schemaless_attributes->toArray(),
-            $this->testModel->schemaless_attributes->all()
-        );
-    }
-
-    /** @test */
-    public function it_can_add_and_save_schemaless_attributes_in_one_go()
-    {
-        $array = [
-            'name' => 'value',
-            'name2' => 'value2',
-        ];
-
-        $testModel = TestModel::create(['schemaless_attributes' => $array]);
-
-        $this->assertEquals($array, $testModel->schemaless_attributes->all());
-    }
-
-    /** @test */
-    public function it_can_and_save_schemaless_attributes_from_json()
-    {
-        $array = [
-            'name' => 'value',
-            'name2' => 'value2',
-        ];
-
-        $testModel = TestModel::create(['schemaless_attributes' => json_encode($array)]);
-
-        $this->assertEquals($array, $testModel->schemaless_attributes->all());
-    }
-
-    /** @test */
-    public function it_can_and_save_schemaless_attributes_as_null_when_non_valid_values()
-    {
-        $testModel = TestModel::create(['schemaless_attributes' => 'string']);
-        $this->assertEquals(null, $testModel->getAttributes()['schemaless_attributes']);
-
-        $testModel = TestModel::create(['schemaless_attributes' => '""']); // not array json
-        $this->assertEquals(null, $testModel->getAttributes()['schemaless_attributes']);
-
-        $testModel = TestModel::create(['schemaless_attributes' => "{'name':'value'}"]); // invalid json format
-        $this->assertEquals(null, $testModel->getAttributes()['schemaless_attributes']);
-
-        $testModel = TestModel::create(['schemaless_attributes' => null]);
-        $this->assertEquals(null, $testModel->getAttributes()['schemaless_attributes']);
-
-        $testModel = TestModel::create(['schemaless_attributes' => false]);
-        $this->assertEquals(null, $testModel->getAttributes()['schemaless_attributes']);
-
-        $testModel = TestModel::create(['schemaless_attributes' => 1]);
-        $this->assertEquals(null, $testModel->getAttributes()['schemaless_attributes']);
-
-        $testModel = TestModel::create(['schemaless_attributes' => 0.1]);
-        $this->assertEquals(null, $testModel->getAttributes()['schemaless_attributes']);
-    }
-
-    /** @test */
-    public function it_has_a_scope_to_get_models_with_the_given_schemaless_attributes()
-    {
-        TestModel::truncate();
-
-        $model1 = TestModel::create(['schemaless_attributes' => [
-            'name' => 'value',
-            'name2' => 'value2',
-            'arr' => [
-                'subKey1' => 'subVal1',
-            ],
-        ]]);
-
-        $model2 = TestModel::create(['schemaless_attributes' => [
-            'name' => 'value',
-            'name2' => 'value2',
-            'arr' => [
-                'subKey1' => 'subVal1',
-            ],
-        ]]);
-
-        $model3 = TestModel::create(['schemaless_attributes' => [
-            'name' => 'value',
-            'name2' => 'value3',
-            'arr' => [
-                'subKey1' => 'subVal2',
-            ],
-        ]]);
-
-        $this->assertContainsModels([
-            $model1, $model2,
-        ], TestModel::withSchemalessAttributes(['name' => 'value', 'name2' => 'value2'])->get());
-
-        $this->assertContainsModels([
-            $model3,
-        ], TestModel::withSchemalessAttributes(['name' => 'value', 'name2' => 'value3'])->get());
-
-        $this->assertContainsModels([
-        ], TestModel::withSchemalessAttributes(['name' => 'value', 'non-existing' => 'value'])->get());
-
-        $this->assertContainsModels([
-            $model1, $model2, $model3,
-        ], TestModel::withSchemalessAttributes([])->get());
-
-        $this->assertContainsModels([
-            $model1, $model2, $model3,
-        ], TestModel::withSchemalessAttributes('name', 'value')->get());
-
-        $this->assertContainsModels([
-            $model1, $model2,
-        ], TestModel::withSchemalessAttributes('name2', '!=', 'value3')->get());
-
-        $this->assertContainsModels([
-            $model3,
-        ], TestModel::withSchemalessAttributes('arr->subKey1', 'subVal2')->get());
-
-        $this->assertContainsModels([
-            $model1, $model2,
-        ], TestModel::withSchemalessAttributes('arr->subKey1', '!=', 'subVal2')->get());
-
-        $this->assertContainsModels([
-        ], TestModel::withSchemalessAttributes('name', 'non-existing-value')->get());
-    }
-
-    /** @test */
-    public function it_can_set_multiple_attributes_one_after_the_other()
-    {
-        $this->testModel->schemaless_attributes->name = 'value';
-        $this->testModel->schemaless_attributes->name2 = 'value2';
-
-        $this->assertEquals([
-            'name' => 'value',
-            'name2' => 'value2',
-        ], $this->testModel->schemaless_attributes->all());
-    }
-
-    /** @test */
-    public function it_returns_an_array_that_can_be_looped()
-    {
-        $this->testModel->schemaless_attributes->name = 'value';
-        $this->testModel->schemaless_attributes->name2 = 'value2';
-
-        $attributes = $this->testModel->schemaless_attributes->all();
-
-        $this->assertCount(2, $attributes);
-
-        foreach ($attributes as $key => $value) {
-            $this->assertNotNull($key);
-            $this->assertNotNull($value);
-        }
-    }
-
-    /** @test */
-    public function it_can_multiple_attributes_at_once_by_passing_an_array_argument()
-    {
-        $this->testModel->schemaless_attributes->set([
-            'foo' => 'bar',
-            'baz' => 'buzz',
-            'arr' => [
-                'subKey1' => 'subVal1',
-                'subKey2' => 'subVal2',
-            ],
-        ]);
-
-        $this->assertEquals('bar', $this->testModel->schemaless_attributes->foo);
-        $this->assertCount(2, $this->testModel->schemaless_attributes->arr);
-        $this->assertEquals('subVal1', $this->testModel->schemaless_attributes->arr['subKey1']);
-    }
-
-    /** @test */
-    public function if_an_iterable_is_passed_to_set_it_will_defer_to_setMany()
-    {
-        $this->testModel->schemaless_attributes->set([
-            'foo' => 'bar',
-            'baz' => 'buzz',
-            'arr' => [
-                'subKey1' => 'subVal1',
-                'subKey2' => 'subVal2',
-            ],
-        ]);
-
-        $this->assertEquals('bar', $this->testModel->schemaless_attributes->foo);
-        $this->assertCount(2, $this->testModel->schemaless_attributes->arr);
-        $this->assertEquals('subVal1', $this->testModel->schemaless_attributes->arr['subKey1']);
-    }
-
-    /** @test */
-    public function it_can_call_collection_method_pop()
-    {
-        $this->testModel->schemaless_attributes->set([
-            'foo' => 'bar',
-            'baz' => 'buzz',
-            'arr' => [
-                'subKey1' => 'subVal1',
-                'subKey2' => 'subVal2',
-            ],
-        ]);
-
-        $item = $this->testModel->schemaless_attributes->pop();
-
-        $this->assertEquals([
+});
+
+it('can multiple attributes at once by passing an array argument', function () {
+    $this->testModel->schemaless_attributes->set([
+        'foo' => 'bar',
+        'baz' => 'buzz',
+        'arr' => [
             'subKey1' => 'subVal1',
             'subKey2' => 'subVal2',
-        ], $item);
-        $this->assertEquals([
-            'foo' => 'bar',
-            'baz' => 'buzz',
-        ], $this->testModel->schemaless_attributes->toArray());
-    }
+        ],
+    ]);
 
-    /** @test */
-    public function it_can_call_collection_method_sum()
-    {
-        $this->testModel->schemaless_attributes->set([
+    expect($this->testModel->schemaless_attributes->foo)->toEqual('bar')
+        ->and($this->testModel->schemaless_attributes->arr)->toHaveCount(2)
+        ->and($this->testModel->schemaless_attributes->arr['subKey1'])->toEqual('subVal1');
+});
+
+test('if an iterable is passed to set it will defer to `setMany`', function () {
+    $this->testModel->schemaless_attributes->set([
+        'foo' => 'bar',
+        'baz' => 'buzz',
+        'arr' => [
+            'subKey1' => 'subVal1',
+            'subKey2' => 'subVal2',
+        ],
+    ]);
+
+    expect($this->testModel->schemaless_attributes->foo)->toEqual('bar')
+        ->and($this->testModel->schemaless_attributes->arr)->toHaveCount(2)
+        ->and($this->testModel->schemaless_attributes->arr['subKey1'])->toEqual('subVal1');
+});
+
+it('can call collection method pop', function () {
+    $this->testModel->schemaless_attributes->set([
+        'foo' => 'bar',
+        'baz' => 'buzz',
+        'arr' => [
+            'subKey1' => 'subVal1',
+            'subKey2' => 'subVal2',
+        ],
+    ]);
+
+    $item = $this->testModel->schemaless_attributes->pop();
+
+    expect($item)->toEqual([
+        'subKey1' => 'subVal1',
+        'subKey2' => 'subVal2',
+    ]);
+
+    expect($this->testModel->schemaless_attributes->toArray())->toEqual([
+        'foo' => 'bar',
+        'baz' => 'buzz',
+    ]);
+});
+
+it('can call collection method `sum`', function () {
+    $this->testModel->schemaless_attributes->set([
+        ['price' => 10],
+        ['price' => 5],
+    ]);
+
+    expect(
+        $this->testModel->schemaless_attributes->sum('price')
+    )->toEqual(15)
+        ->and(
+            $this->testModel->schemaless_attributes->toArray()
+        )->toEqual([
             ['price' => 10],
             ['price' => 5],
         ]);
+});
 
-        $this->assertEquals(15, $this->testModel->schemaless_attributes->sum('price'));
-        $this->assertEquals([
-            ['price' => 10],
-            ['price' => 5],
-        ], $this->testModel->schemaless_attributes->toArray());
-    }
+it('can call collection method `slice`', function () {
+    $this->testModel->schemaless_attributes->set([
+        'foo' => 'bar',
+        'baz' => 'buzz',
+        'lorem' => 'ipsum',
+        'dolor' => 'amet',
+    ]);
 
-    /** @test */
-    public function it_can_call_collection_method_slice()
-    {
-        $this->testModel->schemaless_attributes->set([
-            'foo' => 'bar',
-            'baz' => 'buzz',
-            'lorem' => 'ipsum',
-            'dolor' => 'amet',
-        ]);
+    expect(
+        $this->testModel->schemaless_attributes->slice(1, 2)->toArray()
+    )->toEqual([
+        'baz' => 'buzz',
+        'lorem' => 'ipsum',
+    ]);
 
-        $this->assertEquals([
-            'baz' => 'buzz',
-            'lorem' => 'ipsum',
-        ], $this->testModel->schemaless_attributes->slice(1, 2)->toArray());
-        $this->assertEquals([
-            'foo' => 'bar',
-            'baz' => 'buzz',
-            'lorem' => 'ipsum',
-            'dolor' => 'amet',
-        ], $this->testModel->schemaless_attributes->toArray());
-    }
+    expect(
+        $this->testModel->schemaless_attributes->toArray()
+    )->toEqual([
+        'foo' => 'bar',
+        'baz' => 'buzz',
+        'lorem' => 'ipsum',
+        'dolor' => 'amet',
+    ]);
+});
 
-    /** @test */
-    public function it_can_call_collection_method_only()
-    {
-        $this->testModel->schemaless_attributes->set([
-            'foo' => 'bar',
-            'baz' => 'buzz',
-            'lorem' => 'ipsum',
-            'dolor' => 'amet',
-        ]);
+it('can call collection method only', function () {
+    $this->testModel->schemaless_attributes->set([
+        'foo' => 'bar',
+        'baz' => 'buzz',
+        'lorem' => 'ipsum',
+        'dolor' => 'amet',
+    ]);
 
-        $this->assertEquals([
-            'baz' => 'buzz',
-            'dolor' => 'amet',
-        ], $this->testModel->schemaless_attributes->only('baz', 'dolor')->toArray());
-        $this->assertEquals([
-            'foo' => 'bar',
-            'baz' => 'buzz',
-            'lorem' => 'ipsum',
-            'dolor' => 'amet',
-        ], $this->testModel->schemaless_attributes->toArray());
-    }
+    expect(
+        $this->testModel->schemaless_attributes->only('baz', 'dolor')->toArray()
+    )->toEqual([
+        'baz' => 'buzz',
+        'dolor' => 'amet',
+    ]);
 
-    /** @test */
-    public function an_schemaless_attribute_can_be_set_if_the_has_schemaless_atrributes_trait_is_used(): void
-    {
-        $this->testModelUsedTrait->schemaless_attributes->name = 'value';
+    expect(
+        $this->testModel->schemaless_attributes->toArray()
+    )->toEqual([
+        'foo' => 'bar',
+        'baz' => 'buzz',
+        'lorem' => 'ipsum',
+        'dolor' => 'amet',
+    ]);
+});
 
-        $this->assertEquals('value', $this->testModelUsedTrait->schemaless_attributes->name);
-    }
+test('an schemaless attribute can be set if the hasSchemalessAttribute trait is used', function () {
+    $this->testModelUsedTrait->schemaless_attributes->name = 'value';
 
-    protected function assertContainsModels(array $expectedModels, Collection $actualModels)
-    {
-        $assertionFailedMessage = 'Expected '.count($expectedModels).' models. Got '.$actualModels->count().' models';
-
-        $this->assertEquals(count($expectedModels), $actualModels->count(), $assertionFailedMessage);
-    }
-}
+    expect($this->testModelUsedTrait->schemaless_attributes->name)->toEqual('value');
+});
