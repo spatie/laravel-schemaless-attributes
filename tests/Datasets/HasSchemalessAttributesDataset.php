@@ -7,5 +7,5 @@ dataset('non-valid-values', [
     'null' => null,
     'false' => false,
     'integer' => 1,
-    'float' => 0.1
+    'float' => 0.1,
 ]);
