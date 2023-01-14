@@ -2,6 +2,20 @@
 
 All notable changes to `laravel-schemaless-attributes` will be documented in this file
 
+## 2.4.0 - 2023-01-14
+
+### What's Changed
+
+- PHP 8.2 Build by @erikn69 in https://github.com/spatie/laravel-schemaless-attributes/pull/99
+- Refactor tests to Pest by @alexmanase in https://github.com/spatie/laravel-schemaless-attributes/pull/100
+- Laravel 10.x Support by @erikn69 in https://github.com/spatie/laravel-schemaless-attributes/pull/101
+
+### New Contributors
+
+- @alexmanase made their first contribution in https://github.com/spatie/laravel-schemaless-attributes/pull/100
+
+**Full Changelog**: https://github.com/spatie/laravel-schemaless-attributes/compare/2.3.0...2.4.0
+
 ## 2.3.0 - 2022-01-12
 
 ## What's Changed
