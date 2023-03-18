@@ -16,7 +16,12 @@ class SchemalessAttributesServiceProvider extends PackageServiceProvider
 
     public function registeringPackage(): void
     {
-        Blueprint::macro('schemalessAttributes', function (string $columnName = 'schemaless_attributes') {
+        Blueprint::macro('schemalessAttributes', function (string $columnName = 'schemaless_attributes', string $columnType = 'json') {
+            
+            if ($columnType === 'jsonb') {
+                return $this->jsonb($columnName)->nullable();                
+            }
+            
             return $this->json($columnName)->nullable();
         });
     }
