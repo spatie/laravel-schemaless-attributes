@@ -20,4 +20,9 @@ class TestModel extends Model
     {
         return $this->schemaless_attributes->modelScope();
     }
+
+    public function scopeWithOrWhereExtraAttributes(): Builder
+    {
+        return $this->schemaless_attributes->modelScopeByOrWhere();
+    }
 }
