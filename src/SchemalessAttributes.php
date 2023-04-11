@@ -129,7 +129,12 @@ class SchemalessAttributes implements ArrayAccess, Arrayable, Countable, Iterato
         return $builder;
     }
 
-    public function modelScopeOrWhere(): Builder
+    /**
+     * Adds orWhere to the Query Builder instance to enable larger scopes for searching
+     *
+     * @return Builder
+     */
+    public function modelScopeByOrWhere(): Builder
     {
         $arguments = debug_backtrace()[1]['args'];
 
