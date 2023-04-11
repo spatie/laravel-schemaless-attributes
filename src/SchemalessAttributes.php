@@ -129,6 +129,36 @@ class SchemalessAttributes implements ArrayAccess, Arrayable, Countable, Iterato
         return $builder;
     }
 
+    public function modelScopeOrWhere(): Builder
+    {
+        $arguments = debug_backtrace()[1]['args'];
+
+        if (count($arguments) === 1) {
+            [$builder] = $arguments;
+            $schemalessAttributes = [];
+        }
+
+        if (count($arguments) === 2) {
+            [$builder, $schemalessAttributes] = $arguments;
+        }
+
+        if (count($arguments) === 3) {
+            [$builder, $name, $value] = $arguments;
+            $schemalessAttributes = [$name => $value];
+        }
+
+        if (count($arguments) >= 4) {
+            [$builder, $name, $operator, $value] = $arguments;
+            $schemalessAttributes = [$name => $value];
+        }
+
+        foreach ($schemalessAttributes as $name => $value) {
+            $builder->orWhere("{$this->sourceAttributeName}->{$name}", $operator ?? '=', $value);
+        }
+
+        return $builder;
+    }
+
     public function offsetGet($offset): mixed
     {
         return $this->get($offset);
