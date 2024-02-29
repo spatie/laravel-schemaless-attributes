@@ -2,6 +2,15 @@
 
 All notable changes to `laravel-schemaless-attributes` will be documented in this file
 
+## 2.5.0 - 2024-02-29
+
+### What's Changed
+
+* Fix tests bagde by @erikn69 in https://github.com/spatie/laravel-schemaless-attributes/pull/103
+* Laravel 11 Support by @erikn69 in https://github.com/spatie/laravel-schemaless-attributes/pull/116
+
+**Full Changelog**: https://github.com/spatie/laravel-schemaless-attributes/compare/2.4.0...2.5.0
+
 ## 2.4.0 - 2023-01-14
 
 ### What's Changed
