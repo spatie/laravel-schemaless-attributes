@@ -36,7 +36,7 @@ class SchemalessAttributes implements CastsAttributes
             return $value;
         }
 
-        $json = json_encode($value);
+        $json = json_encode($value, JSON_THROW_ON_ERROR);
 
         if (! is_array(json_decode($json, true))) {
             return null;
