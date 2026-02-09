@@ -446,6 +446,14 @@ it('can call collection method only', function () {
     ]);
 });
 
+it('throws a JsonException when setting a non-JSON-encodable value', function (mixed $value) {
+    $this->testModel->schemaless_attributes->name = $value;
+})->with([
+    'NAN' => NAN,
+    'INF' => INF,
+    '-INF' => -INF,
+])->throws(\JsonException::class);
+
 test('an schemaless attribute can be set if the hasSchemalessAttribute trait is used', function () {
     $this->testModelUsedTrait->schemaless_attributes->name = 'value';
 
