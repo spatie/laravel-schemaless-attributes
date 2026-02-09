@@ -2,6 +2,20 @@
 
 All notable changes to `laravel-schemaless-attributes` will be documented in this file
 
+## 2.5.2 - 2026-02-09
+
+### What's Changed
+
+* Update issue template by @AlexVanderbist in https://github.com/spatie/laravel-schemaless-attributes/pull/119
+* PHP 8.5 tests by @erikn69 in https://github.com/spatie/laravel-schemaless-attributes/pull/120
+* Fix #121: throw JsonException for non-JSON-encodable values by @freekmurze in https://github.com/spatie/laravel-schemaless-attributes/pull/122
+
+### New Contributors
+
+* @AlexVanderbist made their first contribution in https://github.com/spatie/laravel-schemaless-attributes/pull/119
+
+**Full Changelog**: https://github.com/spatie/laravel-schemaless-attributes/compare/2.5.1...2.5.2
+
 ## 2.5.1 - 2025-02-10
 
 ### What's Changed
