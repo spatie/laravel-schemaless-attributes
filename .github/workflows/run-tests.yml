@@ -1,81 +1,92 @@
 name: run-tests
 
-on: [push, pull_request]
+on:
+  - push
+  - pull_request
 
 jobs:
-    test:
-        runs-on: ubuntu-latest
-        strategy:
-            fail-fast: false
-            matrix:
-                php: [8.5, 8.4, 8.3, 8.2, 8.1, 8.0]
-                laravel: [12.*, 11.*, 10.*, 9.*, 8.*]
-                dependency-version: [prefer-lowest, prefer-stable]
-                include:
-                    -   laravel: 12.*
-                        testbench: ^10.6
-                    -   laravel: 11.*
-                        testbench: ^9.6
-                    -   laravel: 10.*
-                        testbench: 8.*
-                    -   laravel: 9.*
-                        testbench: 7.*
-                    -   laravel: 8.*
-                        testbench: ^6.23
-                exclude:
-                    -   laravel: 12.*
-                        php: 8.1
-                    -   laravel: 12.*
-                        php: 8.0
-                    -   laravel: 11.*
-                        php: 8.1
-                    -   laravel: 11.*
-                        php: 8.0
-                    -   laravel: 10.*
-                        php: 8.5
-                    -   laravel: 10.*
-                        php: 8.0
-                    -   laravel: 9.*
-                        php: 8.4
-                    -   laravel: 9.*
-                        php: 8.4
-                    -   laravel: 8.*
-                        php: 8.5
-                    -   laravel: 8.*
-                        php: 8.4
-                    -   laravel: 8.*
-                        php: 8.3
+  test:
+    runs-on: ubuntu-latest
 
-        name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.dependency-version }}
+    strategy:
+      fail-fast: false
+      matrix:
+        php: [8.5, 8.4, 8.3, 8.2, 8.1, 8.0]
+        laravel: ['8.*', '9.*', '10.*', '11.*', '12.*', '13.*']
+        dependency-version: [prefer-lowest, prefer-stable]
+        include:
+          - laravel: 12.*
+            testbench: ^10.6
+          - laravel: 11.*
+            testbench: ^9.6
+          - laravel: 10.*
+            testbench: 8.*
+          - laravel: 9.*
+            testbench: 7.*
+          - laravel: 8.*
+            testbench: ^6.23
+          - laravel: 13.*
+            testbench: ^11.0
+        exclude:
+          - laravel: 12.*
+            php: 8.1
+          - laravel: 12.*
+            php: 8.0
+          - laravel: 11.*
+            php: 8.1
+          - laravel: 11.*
+            php: 8.0
+          - laravel: 10.*
+            php: 8.5
+          - laravel: 10.*
+            php: 8.0
+          - laravel: 9.*
+            php: 8.4
+          - laravel: 9.*
+            php: 8.4
+          - laravel: 8.*
+            php: 8.5
+          - laravel: 8.*
+            php: 8.4
+          - laravel: 8.*
+            php: 8.3
+          - laravel: 13.*
+            php: 8.2
+          - laravel: 13.*
+            php: 8.1
+          - laravel: 13.*
+            php: 8.0
 
-        services:
-            mysql:
-                image: mysql:8.0
-                env:
-                    MYSQL_ALLOW_EMPTY_PASSWORD: yes
-                    MYSQL_DATABASE: laravel_schemaless_attributes
-                    MYSQL_ROOT_PASSWORD: null
-                ports:
-                    - 3306
-                options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+    name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.dependency-version }}
 
-        steps:
-            -   name: Checkout code
-                uses: actions/checkout@v5
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+          MYSQL_DATABASE: laravel_schemaless_attributes
+          MYSQL_ROOT_PASSWORD:
+        ports:
+          - 3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
-            -   name: Setup PHP
-                uses: shivammathur/setup-php@v2
-                with:
-                    php-version: ${{ matrix.php }}
-                    extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, intl, exif, iconv
-                    coverage: none
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
 
-            -   name: Install dependencies
-                run: |
-                    composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" "nesbot/carbon:>=2.72.6" --no-interaction --no-update
-                    composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-suggest
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, intl, exif, iconv
+          coverage: none
 
-            -   name: Execute tests
-                run: vendor/bin/pest
-                env:
-                    DB_PORT: ${{ job.services.mysql.ports[3306] }}
+      - name: Install dependencies
+        run: |
+          composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" "nesbot/carbon:>=2.72.6" --no-interaction --no-update
+          composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-suggest
+
+      - name: Execute tests
+        run: vendor/bin/pest
+        env:
+          DB_PORT: ${{ job.services.mysql.ports[3306] }}
