@@ -2,6 +2,12 @@
 
 All notable changes to `laravel-schemaless-attributes` will be documented in this file
 
+## 2.6.0 - 2026-02-21
+
+### What's Changed
+
+- Add Laravel 13 support
+
 ## 2.5.2 - 2026-02-09
 
 ### What's Changed
