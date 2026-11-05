@@ -52,6 +52,8 @@ We highly appreciate you sending us a postcard from your hometown, mentioning wh
 
 ## Requirements
 
+This package requires PHP 8.4 or higher and Laravel 13.
+
 This package requires a database with support for `json` columns like MySQL 5.7 or higher.
 
 ## Installation
